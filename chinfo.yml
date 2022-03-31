@@ -1,0 +1,23 @@
+{/* <ul>
+              {locales}
+              {locales.map((loc, i) => {
+                return (
+                  <li key={i}>
+                    <Link href={asPath} locale={loc}>
+                      <a hrefLang={loc}>{loc}</a>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <h2>{locale}</h2>
+            <h3>المصير</h3>
+            <h3>{f({ id: "name" })}</h3> */}
+
+             <div className="alert alert-info" role="alert">
+            <h1>
+              <Link href="/about" locale={locale}>
+                <a hrefLang={locale}></a>
+              </Link>
+            </h1>
+          </div>
