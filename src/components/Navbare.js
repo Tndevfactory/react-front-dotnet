@@ -16,6 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Link } from "@mui/material";
+import Drawers from "./Drawers";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -127,8 +128,27 @@ export default function Navbare() {
 
   const preventDefault = (event) => event.preventDefault();
 
+  const [state, setState] = React.useState({
+    left: false,
+    top: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Drawers state={state} anchor={state.left} toggleDrawer={toggleDrawer} />
       <AppBar
         position="fixed"
         sx={{ backgroundColor: "#000", color: "orange" }}
@@ -139,17 +159,21 @@ export default function Navbare() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{ mr: 1, display: { xs: "block", md: "none" } }}
+            onClick={toggleDrawer(Object.keys(state)[0], true)}
           >
             <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"
-            noWrap
+            // noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{
+              display: { xs: "block", sm: "block" },
+              fontSize: { xs: "1rem", md: "1.5rem" },
+            }}
           >
-            3S
+            3S Global
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -164,6 +188,7 @@ export default function Navbare() {
                 "& > :not(style) + :not(style)": {
                   ml: 2,
                 },
+                display: { xs: "none", md: "block" },
               }}
               onClick={preventDefault}
             >
