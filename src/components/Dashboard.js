@@ -297,7 +297,7 @@ export default function Dashboard() {
                     <TextField
                       fullWidth
                       id="standard-basic"
-                      label="Titre incident"
+                      label=""
                       variant="standard"
                     />
                   </Grid>
@@ -327,7 +327,7 @@ export default function Dashboard() {
                     <TextField
                       fullWidth
                       id="standard-basic"
-                      label="Titre incident"
+                      label=""
                       variant="standard"
                     />
                   </Grid>
