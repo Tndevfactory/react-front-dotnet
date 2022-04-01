@@ -2,6 +2,7 @@ import "./App.css";
 import { TndevCtx } from "./contexts/TndevContext";
 import Button from "@mui/material/Button";
 import Navbare from "./components/Navbare";
+import BasicGrid from "./components/Dashboard";
 
 function App() {
   const [methods, states] = TndevCtx();
@@ -17,6 +18,7 @@ function App() {
   return (
     <div className="App">
       <Navbare />
+      <BasicGrid />
     </div>
   );
 }

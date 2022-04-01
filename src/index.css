@@ -7,7 +7,7 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eee;
+  background-color: rgb(255, 255, 255);
   font-size: calc(15px + 6 * ((100vw - 320px) / 1880));
   color: rgb(49, 48, 48) !important;
   line-height: 26px !important;

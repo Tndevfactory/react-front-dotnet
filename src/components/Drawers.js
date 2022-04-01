@@ -33,13 +33,19 @@ export default function Drawers({ state, toggleDrawer }) {
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary="Connexion" />
+          <ListItemText primary="Incident" />
         </ListItem>
         <ListItem button>
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary="inscription" />
+          <ListItemText primary="Intervention Technique" />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Demande de validation" />
         </ListItem>
       </List>
     </Box>
