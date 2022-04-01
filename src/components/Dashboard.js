@@ -1,11 +1,23 @@
 import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Menu,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import SaveIcon from "@mui/icons-material/Save";
+import TreeView from "@mui/lab/TreeView";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TreeItem from "@mui/lab/TreeItem";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -15,7 +27,29 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function BasicGrid() {
+export default function Dashboard() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [tree, setTree] = React.useState("ttt");
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
+  const handleClose = (e) => {
+    console.log("close clicked");
+    console.log(e);
+    console.log(open);
+    setAnchorEl(null);
+    setOpen(false);
+
+    console.log(e.currentTarget);
+  };
+  const treeVal = useRef(null);
+  React.useEffect(() => {
+    console.log(treeVal.current.textContent);
+    treeVal.current.textContent = "Sujet " + tree;
+  }, [tree]);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={0} sx={{ marginBottom: "0.5rem" }}>
@@ -95,12 +129,76 @@ export default function BasicGrid() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField
+                    <Menu
+                      sx={{ width: "40rem" }}
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem
+                        onClick={(e) => {
+                          setOpen(false);
+                        }}
+                      >
+                        Profile
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem sx={{ width: "20rem" }}>
+                        <TreeView
+                          aria-label="file system navigator"
+                          defaultCollapseIcon={<ExpandMoreIcon />}
+                          defaultExpandIcon={<ChevronRightIcon />}
+                          sx={{
+                            height: 240,
+                            flexGrow: 1,
+                            maxWidth: 800,
+                            overflowY: "auto",
+                          }}
+                        >
+                          <TreeItem nodeId="1" label="Applications">
+                            <TreeItem
+                              nodeId="2"
+                              label="Calendar"
+                              onClick={(e) => setTree("Applications/Calendar")}
+                            />
+                          </TreeItem>
+                          <TreeItem nodeId="5" label="Documents">
+                            <TreeItem nodeId="10" label="OSS" />
+                            <TreeItem nodeId="6" label="MUI">
+                              <TreeItem
+                                nodeId="8"
+                                label="index.js"
+                                onClick={() =>
+                                  setTree("Documents/OSS/MUI/index.js")
+                                }
+                              />
+                            </TreeItem>
+                          </TreeItem>
+                        </TreeView>
+                      </MenuItem>
+                    </Menu>
+                    <Typography
+                      onClick={handleClick}
+                      ref={treeVal}
+                      sx={{ marginTop: "1rem", borderBottom: "1px solid #666" }}
+                    >
+                      Sujet
+                    </Typography>
+                    {/* <TextField
                       fullWidth
                       id="Sujet"
                       label="Sujet"
+                      value="ttt"
                       variant="standard"
-                    />
+                      onFocus={handleClick}
+                      onBlur={() => {
+                        console.log("blured");
+                      }}
+                    /> */}
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
