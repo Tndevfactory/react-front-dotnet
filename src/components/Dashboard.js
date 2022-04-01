@@ -65,7 +65,13 @@ export default function BasicGrid() {
             <Item
               sx={{
                 boxShadow: "none",
-                padding: { xs: "0 0", md: "1rem 16rem" },
+                padding: {
+                  xs: "0 0",
+                  sm: "1rem 5rem",
+                  md: "1rem 5rem",
+                  lg: "1rem 8rem",
+                  xl: "1rem 16rem",
+                },
               }}
             >
               {" "}
