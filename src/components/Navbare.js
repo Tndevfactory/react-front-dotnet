@@ -6,16 +6,15 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
+
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
+import { Link } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Link } from "@mui/material";
+
 import Drawers from "./Drawers";
 
 const Search = styled("div")(({ theme }) => ({
@@ -192,28 +191,19 @@ export default function Navbare() {
               }}
               onClick={preventDefault}
             >
-              <Link
-                href="#"
-                underline="hover"
-                color="white"
-                sx={{ margin: "0 1rem", fontWeight: "800" }}
-              >
-                Incident
+              <Link to="/" style={{ color: "white" }}>
+                Accueil
               </Link>
-              <Link
-                href="#"
-                underline="hover"
-                color="white"
-                sx={{ margin: "0 1rem", fontWeight: "800" }}
-              >
-                Intervention technique
+              <Link to="#" style={{ color: "white" }}>
+                Calendrier
               </Link>
-              <Link
-                href="#"
-                underline="hover"
-                color="white"
-                sx={{ margin: "0 1rem", fontWeight: "800" }}
-              >
+              <Link to="/liste-incident" style={{ color: "white" }}>
+                Incidents
+              </Link>
+              <Link to="/creation-incident" style={{ color: "white" }}>
+                Interventions
+              </Link>
+              <Link to="#" style={{ color: "white" }}>
                 Demande de validation
               </Link>
             </Box>

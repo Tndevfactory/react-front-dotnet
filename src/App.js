@@ -1,8 +1,11 @@
 import "./App.css";
 import { TndevCtx } from "./contexts/TndevContext";
-import Button from "@mui/material/Button";
+
 import Navbare from "./components/Navbare";
-import BasicGrid from "./components/Dashboard";
+import CreationIncident from "./components/CreationIncident";
+import Login from "./components/Login";
+import Listeincident from "./components/ListeIncident";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [methods, states] = TndevCtx();
@@ -16,10 +19,16 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Navbare />
-      <BasicGrid />
-    </div>
+    <>
+      <Router>
+        <Navbare />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/liste-incident" element={<Listeincident />} />
+          <Route path="/creation-incident" element={<CreationIncident />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
