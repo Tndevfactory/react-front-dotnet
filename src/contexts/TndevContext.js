@@ -35,8 +35,26 @@ export const apiLogin = async (cred) => {
   return data;
 };
 
+// authMethods  zone  --> loginController
+export const apiLogout = async () => {
+  let url = "/logout";
+  const { data } = await api.get(url);
+  return data;
+};
+
 const authMethods = {
   apiLogin,
+  apiLogout,
+};
+// incidents  zone  --> IncidenController
+export const apiIncidentsAll = async () => {
+  let url = "/incidents-all";
+  const { data } = await api.get(url);
+  return data;
+};
+
+const incidentsMethods = {
+  apiIncidentsAll,
 };
 
 export const TndevProvider = ({ children }) => {
@@ -60,6 +78,7 @@ export const TndevProvider = ({ children }) => {
 
   const methods = {
     authMethods,
+    incidentsMethods,
   };
 
   return (

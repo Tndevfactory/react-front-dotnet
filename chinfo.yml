@@ -57,3 +57,8 @@ git clone -b backend https://github.com/Tndevfactory/Azure-Ad-FST-MANAR-PFE.git
 
 // deploy to heroku specifc branch [backend branch]
 git push heroku backend:master
+
+
+// connect heroku 
+
+heroku pg:psql
