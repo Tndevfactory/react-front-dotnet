@@ -21,3 +21,39 @@
               </Link>
             </h1>
           </div>
+
+
+goto local backend directory
+add the unique remote url of the project 
+git remote origin add https://github.com/Tndevfactory/Azure-Ad-FST-MANAR-PFE.git
+
+// create branch and switch 
+git checkout -b backend  // create branch
+
+//check branch exist optional
+git branch -a  // verify branch
+:wq
+
+// first push to branch backend
+git add .
+git commit -m "commit on backend branch"
+git push --set-upstream origin backend
+
+// normal push to branch backend 
+touch eden.html
+git add .
+git commit -m "Eden added"
+git push origin backend
+
+// return to master 
+git branch master
+git add .
+git commit -m "commit on master"
+git push origin backend
+
+// git clone specific branch
+git clone -b <branchname> <remote-repo-url>
+git clone -b backend https://github.com/Tndevfactory/Azure-Ad-FST-MANAR-PFE.git
+
+// deploy to heroku specifc branch [backend branch]
+git push heroku backend:master
