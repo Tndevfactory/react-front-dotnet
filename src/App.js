@@ -1,44 +1,68 @@
 import "./App.css";
 import { TndevCtx } from "./contexts/TndevContext";
 import { useState } from "react";
-import Navbare from "./components/Navbare";
-import CreationIncident from "./components/CreationIncident";
-import Login from "./components/Login";
-import Listeincident from "./components/ListeIncident";
+import Navbarr from "./components/Navbarr";
+import Login from "./pages/auth/Login";
+import Calendrier from "./pages/calendrier/Calendrier";
+import Incidents from "./pages/incidents/Incidents";
+import Interventions from "./pages/interventions/Interventions";
+import Validations from "./pages/validations/Validations";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProtectedRoutes from "./ProtectedRoutes";
+import AuthRoutes from "./AuthRoutes";
+import GuestRoutes from "./GuestRoutes";
 import { CenterFocusStrong } from "@mui/icons-material";
+
 function App() {
   const [methods, states] = TndevCtx();
   const { authMethods } = methods;
   const { testContext } = authMethods;
-  const { color } = states;
-  const [user, setUser] = useState({ loguedIn: true });
-  const handleClick = () => {
-    let t = testContext();
-    console.log(t);
-  };
+  const { loguedIn } = states;
 
   return (
     <>
       <Router>
-        <Navbare />
+        <Navbarr />
         <Routes>
-          <Route path="/" element={<Login />} />
+          {/* <Route path="/" element={<Login />} /> */}
           <Route
-            path="/liste-incident"
+            path="/"
             element={
-              <ProtectedRoutes user={user}>
-                <Listeincident />
-              </ProtectedRoutes>
+              <GuestRoutes loguedIn={loguedIn}>
+                <Login />
+              </GuestRoutes>
             }
           />
           <Route
-            path="/creation-incident"
+            path="/calendrier"
             element={
-              <ProtectedRoutes user={user}>
-                <CreationIncident />
-              </ProtectedRoutes>
+              <AuthRoutes loguedIn={loguedIn}>
+                <Calendrier />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/incidents"
+            element={
+              <AuthRoutes loguedIn={loguedIn}>
+                <Incidents />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/interventions"
+            element={
+              <AuthRoutes loguedIn={loguedIn}>
+                <Interventions />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/validations"
+            element={
+              <AuthRoutes loguedIn={loguedIn}>
+                <Validations />
+              </AuthRoutes>
             }
           />
           <Route

@@ -9,10 +9,13 @@ export const TndevCtx = () => {
   return useContext(TndevContext);
 };
 
+// config
 const BASE_URL_SERVER = "http://localhost:8000/api";
+console.log(process.env.NODE_ENV);
+console.log(process.env.REACT_APP_BASE_URL);
 const api = axios.create({
   // baseURL: process.env.BASE_URL,
-  baseURL: BASE_URL_SERVER,
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 
 api.interceptors.request.use(function (config) {
@@ -20,53 +23,43 @@ api.interceptors.request.use(function (config) {
   config.headers = { Accept: "application/json" };
   config.headers = { "content-type": "application/json" };
 
-  const token = Cookies.get("wise_token") ? Cookies.get("wise_token") : null;
+  const token = Cookies.get("token3s") ? Cookies.get("token3s") : null;
   config.headers.Authorization = token ? `Bearer ${token}` : "";
   return config;
 });
 
-// checkerController user and auth handler
-
-export const apiListeArticles = async () => {
-  const { data } = await api.get("/articles");
-  return data;
-};
-export const testContext = () => {
-  const data = "hi context ok ";
+// authMethods  zone  --> loginController
+export const apiLogin = async (cred) => {
+  let url = "/login";
+  const { data } = await api.post(url, cred);
   return data;
 };
 
 const authMethods = {
-  apiListeArticles,
-  testContext,
+  apiLogin,
 };
 
 export const TndevProvider = ({ children }) => {
-  const methods = {
-    authMethods,
-  };
+  // init check
+  const [loguedIn, setLoguedIn] = useState(
+    Cookies.get("token3s") ? true : false
+  );
+  const [user, setUser] = useState({});
+  console.log(loguedIn);
 
-  const [darkColor, setDarkColor] = useState("0");
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const color = {
-    lightBlue: "#337bae",
-    darkBlue: "#1a405f",
-    warmWhite: "#fcfcfc",
-    orangeJuice: "#ffb745",
-    darkTheme: "---------------",
-    matteBlack: "#1e1e20",
-    glossWhite: "#ffffff",
-    mediumGray: "#bbc3c6",
-    brickRed: "#962715",
-  };
-
   const states = {
-    darkColor,
-    setDarkColor,
-    color,
     openDrawer,
     setOpenDrawer,
+    loguedIn,
+    setLoguedIn,
+    user,
+    setUser,
+  };
+
+  const methods = {
+    authMethods,
   };
 
   return (

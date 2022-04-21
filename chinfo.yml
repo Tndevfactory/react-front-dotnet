@@ -46,7 +46,7 @@ git commit -m "Eden added"
 git push origin backend
 
 // return to master 
-git branch master
+git checkout master
 git add .
 git commit -m "commit on master"
 git push origin backend

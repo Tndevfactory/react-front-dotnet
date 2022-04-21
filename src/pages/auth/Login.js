@@ -12,6 +12,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useMutation } from "react-query";
+import { TndevCtx } from "../../contexts/TndevContext";
+import { useNavigate } from "react-router-dom";
+
+import Cookies from "js-cookie";
 
 function Copyright(props) {
   return (
@@ -33,14 +38,42 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
+  const [methods, states] = TndevCtx();
+  const { authMethods } = methods;
+  const { apiLogin } = authMethods;
+  const { setLoguedIn, user, setUser } = states;
+
+  let navigate = useNavigate();
+
+  const {
+    mutate: login,
+    isError,
+    isLoading,
+    isSuccess,
+    data,
+  } = useMutation((values) => apiLogin(values), {
+    onSuccess: (data) => {
+      const { access_token, user } = data;
+      if (access_token) {
+        setLoguedIn(true);
+        setUser(user);
+        Cookies.set("token3s", access_token);
+        navigate(`/calendrier`);
+      }
+    },
+    onError: (error) => console.log(error),
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    let cred = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+
+    login(cred);
   };
 
   return (
@@ -55,11 +88,21 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <span
+            style={{
+              textAlign: "center",
+              display: "block",
+              color: "red",
+              fontSize: "1.3rem",
+            }}
+          >
+            {data && data?.response_code === 403 ? data?.error : ""}
+          </span>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Connexion 3S
+            3s Global access
           </Typography>
           <Box
             component="form"
@@ -72,7 +115,7 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
@@ -87,10 +130,7 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth

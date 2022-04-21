@@ -20,7 +20,7 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function Listeincident() {
+export default function Interventions() {
   return (
     <Container sx={{ marginTop: 15 }}>
       <TableContainer component={Paper}>

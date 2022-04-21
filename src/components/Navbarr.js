@@ -1,4 +1,8 @@
 import * as React from "react";
+
+import { TndevCtx } from "../contexts/TndevContext";
+import Cookies from "js-cookie";
+
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -10,7 +14,7 @@ import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -57,22 +61,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbare() {
+export default function Navbarr() {
+  const [methods, states] = TndevCtx();
+  const { authMethods } = methods;
+  const { apiLogin } = authMethods;
+  const { loguedIn, setLoguedIn, user, setUser } = states;
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  let navigate = useNavigate();
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
   };
 
-  const handleMenuClose = () => {
+  const handleLogout = () => {
+    if (Cookies.get("token3s")) {
+      Cookies.remove("token3s");
+    }
+    navigate(`/`);
+    setLoguedIn(false);
+
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -81,7 +99,12 @@ export default function Navbare() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
   const menuId = "primary-search-account-menu";
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -98,8 +121,9 @@ export default function Navbare() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Connexion</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Inscription</MenuItem>
+      {!loguedIn && <MenuItem onClick={handleMenuClose}>Connexion</MenuItem>}
+
+      {loguedIn && <MenuItem onClick={handleLogout}>Deconnexion</MenuItem>}
     </Menu>
   );
 
@@ -121,7 +145,7 @@ export default function Navbare() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Connexion</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Inscription</MenuItem>
+      <MenuItem onClick={handleLogout}>Deconnexion</MenuItem>
     </Menu>
   );
 
@@ -150,7 +174,11 @@ export default function Navbare() {
       <Drawers state={state} anchor={state.left} toggleDrawer={toggleDrawer} />
       <AppBar
         position="fixed"
-        sx={{ backgroundColor: "#000", color: "orange" }}
+        sx={{
+          backgroundColor:
+            "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)",
+          color: "Khaki",
+        }}
       >
         <Toolbar>
           <IconButton
@@ -182,7 +210,7 @@ export default function Navbare() {
                 display: "flex",
                 flexWrap: "wrap",
                 justifyContent: "center",
-                typography: "h6",
+                typography: "body",
 
                 "& > :not(style) + :not(style)": {
                   ml: 2,
@@ -191,22 +219,34 @@ export default function Navbare() {
               }}
               onClick={preventDefault}
             >
-              <Link to="/" style={{ color: "white" }}>
-                Accueil
-              </Link>
-              <Link to="#" style={{ color: "white" }}>
+              <Link
+                to="/calendrier"
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 Calendrier
               </Link>
-              <Link to="/liste-incident" style={{ color: "white" }}>
+              <Link
+                to="/incidents"
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 Incidents
               </Link>
-              <Link to="/creation-incident" style={{ color: "white" }}>
+              <Link
+                to="/interventions"
+                style={{ color: "white", textDecoration: "none" }}
+              >
                 Interventions
               </Link>
-              <Link to="#" style={{ color: "white" }}>
-                Demande de validation
+              <Link
+                to="validations"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Validation
               </Link>
             </Box>
+          </Box>
+          <Box>
+            <Typography>{loguedIn && `${user.fname} ${user.lname}`}</Typography>
           </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
