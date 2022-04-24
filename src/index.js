@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TndevProvider } from "./contexts/TndevContext";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
     <TndevProvider>
+      <CssBaseline />
       <App />
     </TndevProvider>
   </QueryClientProvider>

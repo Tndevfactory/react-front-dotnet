@@ -2,16 +2,19 @@ import * as React from "react";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { TndevCtx } from "../../contexts/TndevContext";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
+
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { Button, Container, TextField, Typography } from "@mui/material";
+import { daysToWeeks } from "date-fns/esm";
 
 const locales = {
   "en-US": enUS,
@@ -39,14 +42,44 @@ const events = [
   },
   {
     title: "Adressage ip",
-    start: new Date(2022, 3, 22),
-    end: new Date(2022, 3, 22),
+    start: new Date("2022-04-22T08:45:00"),
+    end: new Date("2022-04-22T18:45:00"),
   },
 ];
 
 export default function Calendrier() {
+  const queryClient = useQueryClient();
+  const [methods, states] = TndevCtx();
+  const { incidentsMethods } = methods;
+  const { apiIncidentsAll } = incidentsMethods;
+  const { bigData, setBigData } = states;
+
+  const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
+    ["incidents-all"],
+    () => apiIncidentsAll(),
+    {
+      onSuccess: (data) => {
+        setBigData(data);
+      },
+      onError: (error) => console.log(error),
+    }
+  );
+
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
   const [allEvents, setAllEvents] = useState(events);
+
+  // console.log(" from calendar");
+  // console.log(bigData);
+
+  React.useEffect(() => {
+    let dt = bigData.map((i) => ({
+      title: i.name,
+      start: new Date(i.created_at),
+      end: new Date(i.created_at),
+    }));
+
+    setAllEvents([...dt, newEvent]);
+  }, [bigData]);
 
   const handleAddEvents = () => {
     setAllEvents([...allEvents, newEvent]);

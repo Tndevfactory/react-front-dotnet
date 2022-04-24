@@ -47,6 +47,7 @@ git push origin backend
 
 // return to master 
 git checkout master
+git branch -M master
 git add .
 git commit -m "commit on master"
 git push origin backend

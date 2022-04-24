@@ -87,6 +87,7 @@ export default function Navbarr() {
   const handleLogout = () => {
     if (Cookies.get("token3s")) {
       Cookies.remove("token3s");
+      Cookies.remove("user");
     }
     navigate(`/`);
     setLoguedIn(false);

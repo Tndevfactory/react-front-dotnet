@@ -11,8 +11,17 @@ export const TndevCtx = () => {
 
 // config
 const BASE_URL_SERVER = "http://localhost:8000/api";
+console.clear();
+// console.warn("Contact Developer:");
+// console.warn("Name: CH");
+// console.warn("Website: https://tndev-art.tn");
+// console.warn("WhatsApp/Tel: +216 55 38 54 74");
+// console.warn("Email: tndev8@gmail.com");
+// console.warn("facebook: https://www.facebook.com/TndevArt");
+
 console.log(process.env.NODE_ENV);
 console.log(process.env.REACT_APP_BASE_URL);
+
 const api = axios.create({
   // baseURL: process.env.BASE_URL,
   baseURL: process.env.REACT_APP_BASE_URL,
@@ -53,8 +62,40 @@ export const apiIncidentsAll = async () => {
   return data;
 };
 
+export const apiIncidentCreate = async (dt) => {
+  let url = "/incident-create";
+  const { data } = await api.post(url, dt);
+  return data;
+};
+
+export const apiIncidentDelete = async (id) => {
+  let payload = {
+    params: {
+      id: id,
+    },
+  };
+  let url = "/incident-delete";
+  const { data } = await api.delete(url, payload);
+  return data;
+};
+
+export const apiIncidentUpdate = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/incident-update";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+
 const incidentsMethods = {
   apiIncidentsAll,
+  apiIncidentDelete,
+  apiIncidentCreate,
+  apiIncidentUpdate,
 };
 
 export const TndevProvider = ({ children }) => {
@@ -62,9 +103,13 @@ export const TndevProvider = ({ children }) => {
   const [loguedIn, setLoguedIn] = useState(
     Cookies.get("token3s") ? true : false
   );
-  const [user, setUser] = useState({});
-  console.log(loguedIn);
+  const [user, setUser] = useState(
+    Cookies.get("user") ? JSON.parse(Cookies.get("user")) : ""
+  );
+  // console.log(loguedIn);
+  // console.log(user);
 
+  const [bigData, setBigData] = useState([]);
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const states = {
@@ -74,6 +119,8 @@ export const TndevProvider = ({ children }) => {
     setLoguedIn,
     user,
     setUser,
+    bigData,
+    setBigData,
   };
 
   const methods = {

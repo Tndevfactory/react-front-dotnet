@@ -58,6 +58,7 @@ export default function Login() {
       if (access_token) {
         setLoguedIn(true);
         setUser(user);
+        Cookies.set("user", JSON.stringify(user));
         Cookies.set("token3s", access_token);
         navigate(`/calendrier`);
       }
