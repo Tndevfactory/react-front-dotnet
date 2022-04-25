@@ -111,7 +111,6 @@ export default function Interventions() {
     (values) => apiIncidentCreate(values),
     {
       onSuccess: (data) => {
-        console.log(data);
         queryClient.invalidateQueries("incidents-all");
       },
       onError: (error) => console.log(error),
@@ -390,9 +389,9 @@ export default function Interventions() {
                 margin="normal"
                 required
                 fullWidth
-                id="created_date"
-                name="created_date"
-                autoComplete="created_date"
+                id="created_at"
+                name="created_at"
+                autoComplete="created_at"
                 label=""
                 helperText=""
                 variant="standard"
