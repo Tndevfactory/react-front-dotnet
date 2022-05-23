@@ -88,6 +88,7 @@ export default function Calendrier() {
 
   const handleAddEvents = () => {
     setAllEvents([...allEvents, newEvent]);
+    setOpenCalendar(false);
   };
 
   const handleClickCreateCalendar = (id) => {
@@ -116,7 +117,7 @@ export default function Calendrier() {
   };
   return (
     <>
-      <Container style={{ marginTop: "6rem" }}>
+      <Container style={{ marginTop: "8rem" }}>
         <Button onClick={handleClickCreateCalendar}> Creer un evenement</Button>
         <Calendar
           localizer={localizer}
