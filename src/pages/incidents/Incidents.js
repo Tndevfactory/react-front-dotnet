@@ -43,6 +43,7 @@ import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
+import { dateFnsLocalizer } from "react-big-calendar";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -283,6 +284,32 @@ export default function Interventions() {
     setPriorite(e.target.value);
   };
 
+  const handleTri = (e) => {
+    let transformDate = [...bigData];
+    let t = transformDate.map((v, i, t) => [
+      (t[i] = { ...t[i], created_at: new Date(v.created_at) }),
+    ]);
+    let flatArray = [].concat(...t);
+    console.log(flatArray);
+    setBigData(flatArray);
+
+    if (e.target.value === "date-descendante") {
+      console.log(e.target.value);
+      bigData.sort((a, b) => {
+        return a.created_at - b.created_at;
+      });
+    } else if (e.target.value === "date-ascendante") {
+      console.log(e.target.value);
+      bigData.sort((a, b) => {
+        return b.created_at - a.created_at;
+      });
+    } else {
+      console.log("bad format");
+    }
+
+    bigData.map((i) => console.log(i.created_at));
+  };
+
   return (
     <>
       <Container sx={{ marginTop: 15 }}>
@@ -300,7 +327,28 @@ export default function Interventions() {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h6"> Trier</Typography>
+          <Box component="form">
+            <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
+              <InputLabel id="demo-simple-select-standard-label">
+                Trier
+              </InputLabel>
+              <Select
+                labelId="trier"
+                id="trier"
+                value={statut}
+                name="trier"
+                onChange={handleTri}
+                label="Trier"
+              >
+                <MenuItem value="">
+                  <em>Aucun</em>
+                </MenuItem>
+                <MenuItem value={`date-ascendante`}>Date Ascendante</MenuItem>
+                <MenuItem value={`date-descendante`}>Date Descendante</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
           <Button onClick={handleClickOpenCreateDialog}>
             {" "}
             Creer un incident

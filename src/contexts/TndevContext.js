@@ -56,9 +56,14 @@ const authMethods = {
   apiLogout,
 };
 // incidents  zone  --> IncidenController
-export const apiIncidentsAll = async () => {
+export const apiIncidentsAll = async (tri = "asc") => {
+  let payload = {
+    params: {
+      tri: tri,
+    },
+  };
   let url = "/incidents-all";
-  const { data } = await api.get(url);
+  const { data } = await api.get(url, payload);
   return data;
 };
 
