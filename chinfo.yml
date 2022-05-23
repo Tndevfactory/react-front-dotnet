@@ -63,3 +63,12 @@ git push heroku backend:master
 // connect heroku 
 
 heroku pg:psql
+
+
+role admin ingen
+adaptation
+note : 
+note : piece jointe
+date : calendrier tache longue () ?
+incident : calendrier 
+filtre : ? 

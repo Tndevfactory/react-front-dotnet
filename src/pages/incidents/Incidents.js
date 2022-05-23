@@ -34,8 +34,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { red, orange, blue } from "@mui/material/colors";
+import { red, orange, blue, blueGrey } from "@mui/material/colors";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 import TreeView from "@mui/lab/TreeView";
@@ -133,8 +134,27 @@ export default function Interventions() {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
+  const [openDetails, setOpenDetails] = React.useState(false);
   const [recordDelete, setRecordDelete] = React.useState({});
   const [recordUpdate, setRecordUpdate] = React.useState({
+    name: "",
+    sujet: "",
+    description: "",
+    num_contrat: "",
+    num_serie_machine: "",
+    type_prestation: "",
+    assignation: "",
+    raison_assignation: "",
+    statut: "",
+    priorite: "",
+    nature: "",
+    origine: "",
+    client: "",
+    contact_tel: "",
+    contact_email: "",
+  });
+
+  const [recorddetails, setRecorddetails] = React.useState({
     name: "",
     sujet: "",
     description: "",
@@ -194,8 +214,8 @@ export default function Interventions() {
 
   const handleClickOpenUpdateDialog = (id) => {
     let record = data?.find((i) => i.id === id);
-    console.log(record);
     setRecordUpdate(record);
+    console.log(record);
     setOpenUpdate(true);
   };
   const handleUpdate = (event) => {
@@ -212,10 +232,32 @@ export default function Interventions() {
     setOpenUpdate(false);
   };
 
+  const handleClickOpenDetailsDialog = (id) => {
+    let record = data?.find((i) => i.id === id);
+    console.log("handleClickOpenDetailsDialog");
+    console.log(record);
+    setRecorddetails(record);
+    setOpenDetails(true);
+  };
+  const handleClickOpenDetails = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    let dataUpdate = {
+      id: data.get("id"),
+      data: recordUpdate,
+    };
+
+    // console.log(recordUpdate);
+    updateRecord(dataUpdate);
+    setOpenDetails(false);
+  };
+
   const handleClose = () => {
     setOpenCreate(false);
     setOpenDelete(false);
     setOpenUpdate(false);
+    setOpenDetails(false);
 
     setAnchorEl(null);
     setOpen(false);
@@ -247,10 +289,18 @@ export default function Interventions() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "start",
           }}
         >
           <Typography variant="h4"> Gestion des incidents</Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h6"> Trier</Typography>
           <Button onClick={handleClickOpenCreateDialog}>
             {" "}
             Creer un incident
@@ -320,6 +370,13 @@ export default function Interventions() {
                           {format(new Date(i.created_at), "dd-MM-yyyy")}
                         </TableCell>
                         <TableCell align="right">
+                          <IconButton
+                            onClick={() => handleClickOpenDetailsDialog(i.id)}
+                            aria-label="details"
+                            title="details"
+                          >
+                            <VisibilityIcon sx={{ color: "#09f" }} />
+                          </IconButton>
                           <IconButton
                             onClick={() => handleClickOpenUpdateDialog(i.id)}
                             aria-label="update"
@@ -933,6 +990,242 @@ export default function Interventions() {
           <Button type="submit" sx={{ color: orange[500] }}>
             Modifier
           </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        component="form"
+        onSubmit={handleClickOpenDetails}
+        maxWidth="xl"
+        open={openDetails}
+        onClose={handleClose}
+      >
+        <DialogTitle sx={{ color: "white", backgroundColor: blueGrey[500] }}>
+          Details incident N:{recorddetails.id}
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div style={{ marginTop: "1rem" }}>
+              <input type="hidden" name="id" value={recorddetails.id} />
+              <TextField
+                value={recorddetails.name}
+                //onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+                label="Intitule"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.sujet}
+                // onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="sujet"
+                name="sujet"
+                autoComplete="sujet"
+                label="Sujet"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.description}
+                // onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="description"
+                name="description"
+                autoComplete="description"
+                label="Description"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.num_contrat}
+                // onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="num_contrat"
+                name="num_contrat"
+                autoComplete="num_contrat"
+                label="N contrat"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.num_serie_machine}
+                //onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="num_serie_machine"
+                name="num_serie_machine"
+                autoComplete="num_serie_machine"
+                label="N serie"
+                helperText=""
+                variant="standard"
+              />
+            </div>
+            <div>
+              <TextField
+                value={recorddetails.type_prestation}
+                // onChange={handleOnChange}
+                margin="normal"
+                required
+                fullWidth
+                id="type_prestation"
+                name="type_prestation"
+                autoComplete="type_prestation"
+                label="Type prestation"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.assignation}
+                //onChange={handleOnChange}
+                margin="normal"
+                fullWidth
+                id="assignation"
+                name="assignation"
+                autoComplete="assignation"
+                label="Assignation"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.raison_assignation}
+                // onChange={handleOnChange}
+                margin="normal"
+                fullWidth
+                id="raison_assignation"
+                name="raison_assignation"
+                autoComplete="raison_assignation"
+                label="Raison assignation"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.statut}
+                //onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="statut"
+                name="statut"
+                autoComplete="statut"
+                label="Statut"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.priorite}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="priorite"
+                name="priorite"
+                autoComplete="priorite"
+                label="Priorite"
+                helperText=""
+                variant="standard"
+              />
+            </div>
+            <div>
+              <TextField
+                value={recorddetails.nature}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="nature"
+                name="nature"
+                autoComplete="nature"
+                label="Nature"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.origine}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="origine"
+                name="origine"
+                autoComplete="origine"
+                label="Origine"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                value={recorddetails.client}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="client"
+                name="client"
+                autoComplete="client"
+                label="Client"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.contact_tel}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="contact_tel"
+                name="contact_tel"
+                autoComplete="contact_tel"
+                label="Telephone contact"
+                helperText=""
+                variant="standard"
+              />
+
+              <TextField
+                value={recorddetails.contact_email}
+                // onChange={handleOnChange}
+                required
+                margin="normal"
+                fullWidth
+                id="contact_email"
+                name="contact_email"
+                autoComplete="contact_email"
+                label="Email contact"
+                helperText=""
+                variant="standard"
+              />
+            </div>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={{ color: "gray" }}>
+            Fermer
+          </Button>
+          {/* <Button type="submit" sx={{ color: orange[500] }}>
+            Modifier
+          </Button> */}
         </DialogActions>
       </Dialog>
     </>
