@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { red, orange, blue, blueGrey, green } from "@mui/material/colors";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -10,7 +10,11 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import { Box } from "@mui/system";
+import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { Button, Container, TextField, Typography } from "@mui/material";
@@ -67,7 +71,8 @@ export default function Calendrier() {
 
   const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
   const [allEvents, setAllEvents] = useState(events);
-
+  const [openCalendar, setOpenCalendar] = React.useState(false);
+  const [recordCalendar, setRecordCalendar] = React.useState({});
   // console.log(" from calendar");
   // console.log(bigData);
 
@@ -85,51 +90,34 @@ export default function Calendrier() {
     setAllEvents([...allEvents, newEvent]);
   };
 
+  const handleClickCreateCalendar = (id) => {
+    // let record = data?.find((i) => i.id === id);
+    console.log("handleClickCreationCalendar");
+    //console.log(record);
+    //setRecorddetails(record);
+    setOpenCalendar(true);
+  };
+  const handleClickOpenCalendar = (event) => {
+    event.preventDefault();
+    //const data = new FormData(event.currentTarget);
+
+    let dataUpdate = {
+      // id: data.get("id"),
+      // data: recordUpdate,
+    };
+
+    // console.log(recordUpdate);
+    //updateRecord(dataUpdate);
+    setOpenCalendar(false);
+  };
+
+  const handleClose = () => {
+    setOpenCalendar(false);
+  };
   return (
-    <div>
-      <Container>
-        <Typography variant="h4" style={{ marginTop: "6rem" }}>
-          {" "}
-          Ajout Tache
-        </Typography>
-
-        <div>
-          <TextField
-            style={{ width: "185px", marginBottom: "1rem" }}
-            type="text"
-            id="standard-basic"
-            label="titre"
-            variant="standard"
-            value={newEvent.title}
-            onChange={(e) =>
-              setNewEvent({ ...newEvent, title: e.target.value })
-            }
-          />
-          <DatePicker
-            placeholderText="Date debut"
-            style={{
-              marginBottom: "1rem",
-              marginTop: "3rem",
-              marginRight: "10px",
-            }}
-            selected={newEvent.start}
-            onChange={(start) => setNewEvent({ ...newEvent, start })}
-          />
-          <h2></h2>
-          <DatePicker
-            placeholderText="Date fin"
-            selected={newEvent.end}
-            onChange={(end) => setNewEvent({ ...newEvent, end })}
-          />
-          <Button
-            variant="outlined"
-            style={{ marginTop: "1rem" }}
-            onClick={handleAddEvents}
-          >
-            Ajouter
-          </Button>
-        </div>
-
+    <>
+      <Container style={{ marginTop: "6rem" }}>
+        <Button onClick={handleClickCreateCalendar}> Creer un evenement</Button>
         <Calendar
           localizer={localizer}
           events={allEvents}
@@ -137,7 +125,75 @@ export default function Calendrier() {
           endAccessor="end"
           style={{ marginTop: "3rem", height: 500 }}
         />
+
+        <Dialog
+          maxWidth="xl"
+          open={openCalendar}
+          onClose={handleClose}
+          sx={{ minHeight: "700px" }}
+          component="form"
+        >
+          <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
+            Ajouter une Tache
+          </DialogTitle>
+          <DialogContent>
+            <Box
+              noValidate
+              sx={{
+                // display: "flex",
+                // flexDirection: "column",
+                m: "auto",
+                minWidth: "350px",
+                minHeight: "350px",
+              }}
+            >
+              <div style={{ marginTop: "1.3rem" }}>
+                <TextField
+                  // style={{ width: "185px", marginBottom: "1rem" }}
+                  fullWidth
+                  type="text"
+                  id="standard-basic"
+                  label="titre"
+                  variant="standard"
+                  value={newEvent.title}
+                  onChange={(e) =>
+                    setNewEvent({ ...newEvent, title: e.target.value })
+                  }
+                />
+                <div style={{ marginTop: "1.3rem" }}>
+                  <DatePicker
+                    placeholderText="Date debut"
+                    style={{
+                      marginBottom: "1rem",
+                      paddingTop: "3rem",
+                      marginRight: "10px",
+                    }}
+                    selected={newEvent.start}
+                    onChange={(start) => setNewEvent({ ...newEvent, start })}
+                  />
+                </div>
+
+                <h2></h2>
+                <div style={{ marginTop: "1.3rem" }}>
+                  <DatePicker
+                    placeholderText="Date de fin"
+                    selected={newEvent.end}
+                    onChange={(end) => setNewEvent({ ...newEvent, end })}
+                  />
+                </div>
+              </div>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} sx={{ color: "gray" }}>
+              Annuler
+            </Button>
+            <Button variant="outlined" onClick={handleAddEvents}>
+              Ajouter
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
-    </div>
+    </>
   );
 }
