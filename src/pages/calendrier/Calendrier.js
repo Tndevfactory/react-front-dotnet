@@ -182,6 +182,13 @@ export default function Calendrier() {
                     onChange={(end) => setNewEvent({ ...newEvent, end })}
                   />
                 </div>
+                <Box sx={{ mt: 9 }}>
+                  <Typography>Note:</Typography>
+                  <Typography>
+                    Pour la creation d'un evenement ou tache, veuillez cliquer
+                    sur le bouton ajouter
+                  </Typography>
+                </Box>
               </div>
             </Box>
           </DialogContent>
