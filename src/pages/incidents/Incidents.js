@@ -329,7 +329,7 @@ export default function Interventions() {
 
   return (
     <>
-      <Container sx={{ marginTop: 15 }}>
+      <Container sx={{ marginTop: 15 }} maxWidth="xl">
         <Box
           sx={{
             display: "flex",
@@ -344,7 +344,7 @@ export default function Interventions() {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "block" }}>
             <Box component="form">
               <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
                 <InputLabel id="demo-simple-select-standard-label">
@@ -408,6 +408,7 @@ export default function Interventions() {
                   <StyledTableCell align="right">priorite</StyledTableCell>
                   <StyledTableCell align="right">Duree(h)</StyledTableCell>
                   <StyledTableCell align="right">Date</StyledTableCell>
+
                   <StyledTableCell align="right">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -467,19 +468,21 @@ export default function Interventions() {
                             <VisibilityIcon sx={{ color: "#09f" }} />
                           </IconButton>
                           <IconButton
-                            onClick={() => handleClickOpenUpdateDialog(i.id)}
-                            aria-label="update"
-                            title="mise a jour"
-                          >
-                            <BorderColorIcon sx={{ color: "orange" }} />
-                          </IconButton>
-                          <IconButton
                             onClick={() => handleClickOpenDeleteDialog(i.id)}
                             aria-label="delete"
                             title="suppression"
                           >
                             <DeleteIcon sx={{ color: "red" }} />
                           </IconButton>
+
+                          <IconButton
+                            onClick={() => handleClickOpenUpdateDialog(i.id)}
+                            aria-label="update"
+                            title="mise a jour"
+                          >
+                            <BorderColorIcon sx={{ color: "orange" }} />
+                          </IconButton>
+
                           <IconButton
                             onClick={() =>
                               handleClickOpenValidationDialog(i.id)
@@ -806,7 +809,7 @@ export default function Interventions() {
             </div>
             <div style={{ paddingTop: "2rem" }}>
               <TextareaAutosize
-                sx={{ pt: 6 }}
+                sx={{ pt: 6, BorderColor: "red", outline: "none" }}
                 id="description"
                 name="description"
                 aria-label="minimum height"
