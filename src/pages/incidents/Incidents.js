@@ -32,11 +32,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
 import DialogTitle from "@mui/material/DialogTitle";
-
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { red, orange, blue, blueGrey } from "@mui/material/colors";
+import { red, orange, blue, blueGrey, green } from "@mui/material/colors";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 import TreeView from "@mui/lab/TreeView";
@@ -135,8 +135,10 @@ export default function Interventions() {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
+  const [openValidation, setOpenValidation] = React.useState(false);
   const [openDetails, setOpenDetails] = React.useState(false);
   const [recordDelete, setRecordDelete] = React.useState({});
+  const [recordValidation, setRecordValidation] = React.useState({});
   const [recordUpdate, setRecordUpdate] = React.useState({
     name: "",
     sujet: "",
@@ -213,6 +215,20 @@ export default function Interventions() {
     setOpenDelete(false);
   };
 
+  const handleClickOpenValidationDialog = (id) => {
+    let record = data?.find((i) => i.id === id);
+    console.log(record);
+    setRecordValidation(record);
+
+    setOpenValidation(true);
+  };
+
+  const handleValidation = (id) => {
+    console.log(id);
+    deleteRecord(id);
+    setOpenValidation(false);
+  };
+
   const handleClickOpenUpdateDialog = (id) => {
     let record = data?.find((i) => i.id === id);
     setRecordUpdate(record);
@@ -259,6 +275,7 @@ export default function Interventions() {
     setOpenDelete(false);
     setOpenUpdate(false);
     setOpenDetails(false);
+    setOpenValidation(false);
 
     setAnchorEl(null);
     setOpen(false);
@@ -327,27 +344,51 @@ export default function Interventions() {
             justifyContent: "space-between",
           }}
         >
-          <Box component="form">
-            <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
-              <InputLabel id="demo-simple-select-standard-label">
-                Trier
-              </InputLabel>
-              <Select
-                labelId="trier"
-                id="trier"
-                value={statut}
-                name="trier"
-                onChange={handleTri}
-                label="Trier"
-              >
-                <MenuItem value="">
-                  <em>Aucun</em>
-                </MenuItem>
-                <MenuItem value={`date-ascendante`}>Date Ascendante</MenuItem>
-                <MenuItem value={`date-descendante`}>Date Descendante</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          <div style={{ display: "flex" }}>
+            <Box component="form">
+              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Filtrer par statut
+                </InputLabel>
+                <Select
+                  labelId="trier"
+                  id="trier"
+                  value={statut}
+                  name="trier"
+                  onChange={handleTri}
+                  label="Trier"
+                >
+                  <MenuItem value="">
+                    <em>Aucun</em>
+                  </MenuItem>
+                  <MenuItem value={`en_cours`}>en cours</MenuItem>
+                  <MenuItem value={`résolu`}>résolu</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box component="form">
+              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Filtrer par proirité
+                </InputLabel>
+                <Select
+                  labelId="trier"
+                  id="trier"
+                  value={statut}
+                  name="trier"
+                  onChange={handleTri}
+                  label="Trier"
+                >
+                  <MenuItem value="">
+                    <em>Aucun</em>
+                  </MenuItem>
+                  <MenuItem value={`haute`}>Haute</MenuItem>
+                  <MenuItem value={`moyenne`}>Moyenne</MenuItem>
+                  <MenuItem value={`basse`}>Basse</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
 
           <Button onClick={handleClickOpenCreateDialog}>
             {" "}
@@ -438,6 +479,15 @@ export default function Interventions() {
                             title="suppression"
                           >
                             <DeleteIcon sx={{ color: "red" }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() =>
+                              handleClickOpenValidationDialog(i.id)
+                            }
+                            aria-label="validationcloture"
+                            title="demande de validation de cloture"
+                          >
+                            <EventAvailableIcon sx={{ color: "green" }} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -771,7 +821,7 @@ export default function Interventions() {
 
       <Dialog maxWidth="xl" open={openDelete} onClose={handleClose}>
         <DialogTitle sx={{ color: "white", backgroundColor: red[500] }}>
-          Suppression definitive
+          Suppression Incident
         </DialogTitle>
         <DialogContent>
           <Box
@@ -803,7 +853,44 @@ export default function Interventions() {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <Dialog
+        className="validation"
+        maxWidth="xl"
+        open={openValidation}
+        onClose={handleClose}
+      >
+        <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
+          Demande de cloture incident
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            noValidate
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              m: "auto",
+              width: "fit-content",
+            }}
+          >
+            <Typography sx={{ mt: 4 }} variant="h6">
+              {" "}
+              Merci de cloturer cet incident .
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={{ color: "gray" }}>
+            Annuler
+          </Button>
+          <Button
+            onClick={() => handleValidation(recordDelete.id)}
+            sx={{ color: red[500] }}
+          >
+            Confirmer
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         component="form"
         onSubmit={handleUpdate}
@@ -1061,7 +1148,8 @@ export default function Interventions() {
             <div style={{ marginTop: "1rem" }}>
               <input type="hidden" name="id" value={recorddetails.id} />
               <TextField
-                value={recorddetails.name}
+                defaultValue={recorddetails.name}
+                inputProps={{ readOnly: true }}
                 //onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1069,13 +1157,13 @@ export default function Interventions() {
                 id="name"
                 name="name"
                 autoComplete="name"
-                autoFocus
                 label="Intitule"
                 helperText=""
                 variant="standard"
               />
               <TextField
-                value={recorddetails.sujet}
+                defaultValue={recorddetails.sujet}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1088,7 +1176,8 @@ export default function Interventions() {
                 variant="standard"
               />
               <TextField
-                value={recorddetails.description}
+                defaultValue={recorddetails.description}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1102,7 +1191,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.num_contrat}
+                defaultValue={recorddetails.num_contrat}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1116,7 +1206,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.num_serie_machine}
+                defaultValue={recorddetails.num_serie_machine}
+                inputProps={{ readOnly: true }}
                 //onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1131,7 +1222,8 @@ export default function Interventions() {
             </div>
             <div>
               <TextField
-                value={recorddetails.type_prestation}
+                defaultValue={recorddetails.type_prestation}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 margin="normal"
                 required
@@ -1144,7 +1236,8 @@ export default function Interventions() {
                 variant="standard"
               />
               <TextField
-                value={recorddetails.assignation}
+                defaultValue={recorddetails.assignation}
+                inputProps={{ readOnly: true }}
                 //onChange={handleOnChange}
                 margin="normal"
                 fullWidth
@@ -1156,7 +1249,8 @@ export default function Interventions() {
                 variant="standard"
               />
               <TextField
-                value={recorddetails.raison_assignation}
+                defaultValue={recorddetails.raison_assignation}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 margin="normal"
                 fullWidth
@@ -1169,7 +1263,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.statut}
+                defaultValue={recorddetails.statut}
+                inputProps={{ readOnly: true }}
                 //onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1183,7 +1278,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.priorite}
+                defaultValue={recorddetails.priorite}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1198,7 +1294,8 @@ export default function Interventions() {
             </div>
             <div>
               <TextField
-                value={recorddetails.nature}
+                defaultValue={recorddetails.nature}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1211,7 +1308,8 @@ export default function Interventions() {
                 variant="standard"
               />
               <TextField
-                value={recorddetails.origine}
+                defaultValue={recorddetails.origine}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1224,7 +1322,8 @@ export default function Interventions() {
                 variant="standard"
               />
               <TextField
-                value={recorddetails.client}
+                defaultValue={recorddetails.client}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1238,7 +1337,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.contact_tel}
+                defaultValue={recorddetails.contact_tel}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
@@ -1252,7 +1352,8 @@ export default function Interventions() {
               />
 
               <TextField
-                value={recorddetails.contact_email}
+                defaultValue={recorddetails.contact_email}
+                inputProps={{ readOnly: true }}
                 // onChange={handleOnChange}
                 required
                 margin="normal"
