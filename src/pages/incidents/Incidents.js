@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 import {
   Button,
   Container,
@@ -516,7 +516,7 @@ export default function Interventions() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
-          Creation nouvel incident
+          Création nouvel incident
         </DialogTitle>
         <DialogContent>
           <Box
@@ -639,11 +639,12 @@ export default function Interventions() {
                 id="description"
                 name="description"
                 autoComplete="description"
-                label="Description"
+                label="Details"
                 helperText=""
                 variant="standard"
               />
             </div>
+
             <div>
               <TextField
                 margin="normal"
@@ -799,6 +800,27 @@ export default function Interventions() {
                 name="contact_email"
                 autoComplete="contact_email"
                 label="Email contact"
+                helperText=""
+                variant="standard"
+              />
+            </div>
+            <div style={{ paddingTop: "2rem" }}>
+              <TextareaAutosize
+                sx={{ pt: 6 }}
+                id="description"
+                name="description"
+                aria-label="minimum height"
+                minRows={3}
+                placeholder="Description"
+                style={{ width: "100%" }}
+              />
+              <TextField
+                type="file"
+                margin="normal"
+                fullWidth
+                id="filel"
+                name="file"
+                label="piece jointe"
                 helperText=""
                 variant="standard"
               />
