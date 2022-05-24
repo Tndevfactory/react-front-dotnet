@@ -1158,6 +1158,27 @@ export default function Incidents() {
                 variant="standard"
               />
             </div>
+            <div style={{ paddingTop: "2rem" }}>
+              <TextareaAutosize
+                sx={{ pt: 6, BorderColor: "red", outline: "none" }}
+                id="description"
+                name="description"
+                aria-label="minimum height"
+                minRows={3}
+                placeholder="Description"
+                style={{ width: "100%" }}
+              />
+              <TextField
+                type="file"
+                margin="normal"
+                fullWidth
+                id="filel"
+                name="file"
+                label="piece jointe"
+                helperText=""
+                variant="standard"
+              />
+            </div>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -1404,6 +1425,27 @@ export default function Incidents() {
                 name="contact_email"
                 autoComplete="contact_email"
                 label="Email contact"
+                helperText=""
+                variant="standard"
+              />
+            </div>
+            <div style={{ paddingTop: "1rem" }}>
+              <Typography style={{ width: "100%" }}>
+                <span style={{ display: "block", paddingBottom: "1rem" }}>
+                  Description:
+                </span>
+
+                <span style={{ display: "block", paddingBottom: "1rem" }}>
+                  {recorddetails.contact_email}
+                </span>
+              </Typography>
+              <TextField
+                type="file"
+                margin="normal"
+                fullWidth
+                id="filel"
+                name="file"
+                label="piece jointe"
                 helperText=""
                 variant="standard"
               />
