@@ -941,7 +941,7 @@ export default function Incidents() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: orange[500] }}>
-          Mise a jour incident N:{recordUpdate.id}
+          Mise a jour incident
         </DialogTitle>
         <DialogContent>
           <Box
@@ -1177,7 +1177,7 @@ export default function Incidents() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blueGrey[500] }}>
-          Details incident N:{recorddetails.id}
+          Details incident
         </DialogTitle>
         <DialogContent>
           <Box
