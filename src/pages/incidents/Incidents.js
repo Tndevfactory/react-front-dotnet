@@ -1,4 +1,6 @@
 import * as React from "react";
+import axios from "axios";
+import fileDownload from "js-file-download";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+
 import {
   Button,
   Collapse,
@@ -263,15 +266,15 @@ export default function Incidents() {
   };
   const handleClickOpenDetails = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    // const data = new FormData(event.currentTarget);
 
-    let dataUpdate = {
-      id: data.get("id"),
-      data: recordUpdate,
-    };
+    // let dataUpdate = {
+    //   id: data.get("id"),
+    //   data: recordUpdate,
+    // };
 
-    // console.log(recordUpdate);
-    updateRecord(dataUpdate);
+    // // console.log(recordUpdate);
+    // updateRecord(dataUpdate);
     setOpenDetails(false);
   };
 
@@ -341,7 +344,16 @@ export default function Incidents() {
   const handleClickCollapseThird = () => {
     setOpenThirdLevel(!openThirdLevel);
   };
-
+  // download file link
+  const handleDownload = (url, filename) => {
+    axios
+      .get(url, {
+        responseType: "blob",
+      })
+      .then((res) => {
+        fileDownload(res.data, filename);
+      });
+  };
   return (
     <>
       <Container sx={{ marginTop: 15 }} maxWidth="xl">
@@ -1439,16 +1451,17 @@ export default function Incidents() {
                   {recorddetails.contact_email}
                 </span>
               </Typography>
-              <TextField
-                type="file"
-                margin="normal"
-                fullWidth
-                id="filel"
-                name="file"
-                label="piece jointe"
-                helperText=""
-                variant="standard"
-              />
+
+              <Button
+                onClick={() => {
+                  handleDownload(
+                    "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                    "62118.jpeg"
+                  );
+                }}
+              >
+                Télécharger fichier ...
+              </Button>
             </div>
           </Box>
         </DialogContent>
