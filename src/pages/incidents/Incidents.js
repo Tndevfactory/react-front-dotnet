@@ -12,9 +12,14 @@ import Select from "@mui/material/Select";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import {
   Button,
+  Collapse,
   Container,
   IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   TextField,
@@ -43,7 +48,7 @@ import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
-import { dateFnsLocalizer } from "react-big-calendar";
+import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function Interventions() {
+export default function Incidents() {
   const queryClient = useQueryClient();
   const [methods, states] = TndevCtx();
   const { incidentsMethods } = methods;
@@ -327,6 +332,16 @@ export default function Interventions() {
     bigData.map((i) => console.log(i.created_at));
   };
 
+  const [openSecondLevel, setOpenSecondLevel] = React.useState(false);
+  const [openThirdLevel, setOpenThirdLevel] = React.useState(false);
+
+  const handleClickCollapseSecond = () => {
+    setOpenSecondLevel(!openSecondLevel);
+  };
+  const handleClickCollapseThird = () => {
+    setOpenThirdLevel(!openThirdLevel);
+  };
+
   return (
     <>
       <Container sx={{ marginTop: 15 }} maxWidth="xl">
@@ -344,50 +359,52 @@ export default function Interventions() {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "block" }}>
-            <Box component="form">
-              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Filtrer par statut
-                </InputLabel>
-                <Select
-                  labelId="trier"
-                  id="trier"
-                  value={statut}
-                  name="trier"
-                  onChange={handleTri}
-                  label="Trier"
-                >
-                  <MenuItem value="">
-                    <em>Aucun</em>
-                  </MenuItem>
-                  <MenuItem value={`en_cours`}>en cours</MenuItem>
-                  <MenuItem value={`résolu`}>résolu</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            <Box component="form">
-              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Filtrer par proirité
-                </InputLabel>
-                <Select
-                  labelId="trier"
-                  id="trier"
-                  value={statut}
-                  name="trier"
-                  onChange={handleTri}
-                  label="Trier"
-                >
-                  <MenuItem value="">
-                    <em>Aucun</em>
-                  </MenuItem>
-                  <MenuItem value={`haute`}>Haute</MenuItem>
-                  <MenuItem value={`moyenne`}>Moyenne</MenuItem>
-                  <MenuItem value={`basse`}>Basse</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+          <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              onMouseEnter={handleClick}
+            >
+              Filtrer par
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleClickCollapseSecond}>
+                Statut {openSecondLevel ? <ExpandLess /> : <ExpandMore />}
+              </MenuItem>
+              <Collapse
+                in={openSecondLevel}
+                timeout="auto"
+                unmountOnExit
+                sx={{ paddingLeft: 3 }}
+              >
+                <MenuItem onClick={handleClose}> En cours</MenuItem>
+                <MenuItem onClick={handleClose}> Résolu</MenuItem>
+              </Collapse>
+              <MenuItem onClick={handleClickCollapseThird}>
+                Priorite {openThirdLevel ? <ExpandLess /> : <ExpandMore />}
+              </MenuItem>
+              <Collapse
+                in={openThirdLevel}
+                timeout="auto"
+                unmountOnExit
+                sx={{ paddingLeft: 3 }}
+              >
+                <MenuItem onClick={handleClose}> Haute</MenuItem>
+                <MenuItem onClick={handleClose}> Haute</MenuItem>
+                <MenuItem onClick={handleClose}> Moyenne</MenuItem>
+              </Collapse>
+            </Menu>
           </div>
 
           <Button onClick={handleClickOpenCreateDialog}>

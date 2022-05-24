@@ -84,3 +84,50 @@ admin
 user
 trier par statut
 trier par date
+
+<div style={{ display: "block" }}>
+            <Box component="form">
+              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Filtrer par statut
+                </InputLabel>
+                <Select
+                  labelId="trier"
+                  id="trier"
+                  value={statut}
+                  name="trier"
+                  onChange={handleTri}
+                  label="Trier"
+                >
+                  <MenuItem value="">
+                    <em>Aucun</em>
+                  </MenuItem>
+                  <MenuItem value={`en_cours`}>en cours</MenuItem>
+                  <MenuItem value={`résolu`}>résolu</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box component="form">
+              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Filtrer par proirité
+                </InputLabel>
+                <Select
+                  labelId="trier"
+                  id="trier"
+                  value={statut}
+                  name="trier"
+                  onChange={handleTri}
+                  label="Trier"
+                >
+                  <MenuItem value="">
+                    <em>Aucun</em>
+                  </MenuItem>
+                  <MenuItem value={`haute`}>Haute</MenuItem>
+                  <MenuItem value={`moyenne`}>Moyenne</MenuItem>
+                  <MenuItem value={`basse`}>Basse</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          
+          </div>
