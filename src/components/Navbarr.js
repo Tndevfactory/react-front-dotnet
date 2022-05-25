@@ -201,7 +201,7 @@ export default function Navbarr() {
               fontSize: { xs: "1rem", md: "1.5rem" },
             }}
           >
-            3S Global
+            3S Incident Tracker
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -247,7 +247,10 @@ export default function Navbarr() {
             </Box>
           </Box>
           <Box>
-            <Typography>{loguedIn && `${user.fname} ${user.lname}`}</Typography>
+            <Typography>
+              {" "}
+              Ingénieur {loguedIn && `${user.fname} ${user.lname}`}
+            </Typography>
           </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

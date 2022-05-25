@@ -28,7 +28,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://3s-nine.vercel.app/">
-        3s global
+        3s Incident Tracker
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}

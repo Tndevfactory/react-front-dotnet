@@ -7,13 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-
+import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import {
   Button,
   Container,
   IconButton,
   TextField,
   Typography,
+  Menu,
+  MenuItem,
+  Collapse,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TndevCtx } from "../../contexts/TndevContext";
@@ -69,6 +72,8 @@ export default function Interventions() {
   } = incidentsMethods;
 
   const { setLoguedIn, user, setUser } = states;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
   const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
     ["incidents-all"],
     () => apiIncidentsAll(),
@@ -170,7 +175,10 @@ export default function Interventions() {
     deleteRecord(id);
     setOpenDelete(false);
   };
-
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
   const handleClickOpenUpdateDialog = (id) => {
     let record = data?.find((i) => i.id === id);
     console.log(record);
@@ -195,18 +203,85 @@ export default function Interventions() {
     setOpenCreate(false);
     setOpenDelete(false);
     setOpenUpdate(false);
+
+    setAnchorEl(null);
+    setOpen(false);
+  };
+  const [openSecondLevel, setOpenSecondLevel] = React.useState(false);
+  const [openThirdLevel, setOpenThirdLevel] = React.useState(false);
+
+  const handleClickCollapseSecond = () => {
+    setOpenSecondLevel(!openSecondLevel);
+  };
+  const handleClickCollapseThird = () => {
+    setOpenThirdLevel(!openThirdLevel);
   };
 
   return (
     <>
-      <Container sx={{ marginTop: 15 }}>
+      <Container sx={{ marginTop: 15 }} maxWidth="xl">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "start",
+          }}
+        >
+          <Typography variant="h4">Gestion des taches</Typography>
+        </Box>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4">Gestion des taches</Typography>
+          <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              onMouseEnter={handleClick}
+            >
+              Filtrer par
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleClickCollapseSecond}>
+                Statut {openSecondLevel ? <ExpandLess /> : <ExpandMore />}
+              </MenuItem>
+              <Collapse
+                in={openSecondLevel}
+                timeout="auto"
+                unmountOnExit
+                sx={{ paddingLeft: 3 }}
+              >
+                <MenuItem onClick={handleClose}> En cours</MenuItem>
+                <MenuItem onClick={handleClose}> Résolu</MenuItem>
+              </Collapse>
+              <MenuItem onClick={handleClickCollapseThird}>
+                Priorite {openThirdLevel ? <ExpandLess /> : <ExpandMore />}
+              </MenuItem>
+              <Collapse
+                in={openThirdLevel}
+                timeout="auto"
+                unmountOnExit
+                sx={{ paddingLeft: 3 }}
+              >
+                <MenuItem onClick={handleClose}> Haute</MenuItem>
+                <MenuItem onClick={handleClose}> Haute</MenuItem>
+                <MenuItem onClick={handleClose}> Moyenne</MenuItem>
+              </Collapse>
+            </Menu>
+          </div>
+
           <Button onClick={handleClickOpenCreateDialog}>Creer une Tache</Button>
         </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
