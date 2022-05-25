@@ -606,7 +606,7 @@ export default function Taches() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>Typologies Incidents:</MenuItem>
+                <MenuItem>Typologies interventions:</MenuItem>
                 <MenuItem sx={{ minWidth: "14rem" }}>
                   <TreeView
                     aria-label="file system navigator"
@@ -886,7 +886,7 @@ export default function Taches() {
 
       <Dialog maxWidth="xl" open={openDelete} onClose={handleClose}>
         <DialogTitle sx={{ color: "white", backgroundColor: red[500] }}>
-          Suppression Incident
+          Suppression intervention
         </DialogTitle>
         <DialogContent>
           <Box
@@ -901,8 +901,7 @@ export default function Taches() {
           >
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
-              <PriorityHighIcon sx={{ verticalAlign: "middle" }} />{" "}
-              Confirmez-vous la suppression de cet incident ?
+              Confirmez-vous la suppression de cette intervention ?
             </Typography>
           </Box>
         </DialogContent>
@@ -964,7 +963,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: orange[500] }}>
-          Mise a jour incident
+          Mise a jour intervention
         </DialogTitle>
         <DialogContent>
           <Box
@@ -1221,7 +1220,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blueGrey[500] }}>
-          Details incident
+          Details intervention
         </DialogTitle>
         <DialogContent>
           <Box

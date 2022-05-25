@@ -887,7 +887,7 @@ export default function Taches() {
 
       <Dialog maxWidth="xl" open={openDelete} onClose={handleClose}>
         <DialogTitle sx={{ color: "white", backgroundColor: red[500] }}>
-          Suppression Incident
+          Suppression tache
         </DialogTitle>
         <DialogContent>
           <Box
@@ -902,8 +902,7 @@ export default function Taches() {
           >
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
-              <PriorityHighIcon sx={{ verticalAlign: "middle" }} />{" "}
-              Confirmez-vous la suppression de cet incident ?
+              Confirmez-vous la suppression de cette tache ?
             </Typography>
           </Box>
         </DialogContent>
@@ -965,7 +964,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: orange[500] }}>
-          Mise a jour incident
+          Mise a jour tache
         </DialogTitle>
         <DialogContent>
           <Box
@@ -1222,7 +1221,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blueGrey[500] }}>
-          Details incident
+          Details tache
         </DialogTitle>
         <DialogContent>
           <Box

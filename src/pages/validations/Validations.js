@@ -423,10 +423,10 @@ export default function Validations() {
             </Menu>
           </div>
 
-          <Button onClick={handleClickOpenCreateDialog}>
+          {/* <Button onClick={handleClickOpenCreateDialog}>
             {" "}
             Creer un incident
-          </Button>
+          </Button> */}
         </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 700 }}>
@@ -560,7 +560,7 @@ export default function Validations() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
-          Création nouvel incident
+          Création nouvel
         </DialogTitle>
         <DialogContent>
           <Box
@@ -607,7 +607,7 @@ export default function Validations() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>Typologies Incidents:</MenuItem>
+                <MenuItem>Typologies validations:</MenuItem>
                 <MenuItem sx={{ minWidth: "14rem" }}>
                   <TreeView
                     aria-label="file system navigator"
