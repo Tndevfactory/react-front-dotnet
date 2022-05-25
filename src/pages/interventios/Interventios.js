@@ -1,6 +1,4 @@
 import * as React from "react";
-import axios from "axios";
-import fileDownload from "js-file-download";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,24 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-
+import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import {
   Button,
-  Collapse,
   Container,
   IconButton,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
   TextField,
   Typography,
+  Menu,
+  MenuItem,
+  Collapse,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { TndevCtx } from "../../contexts/TndevContext";
@@ -40,22 +30,15 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
 import DialogTitle from "@mui/material/DialogTitle";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { red, orange, blue, blueGrey, green } from "@mui/material/colors";
-import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
-import TreeView from "@mui/lab/TreeView";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import TreeItem from "@mui/lab/TreeItem";
-import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { red, orange, blue, green } from "@mui/material/colors";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: green[900],
+    backgroundColor: green[700],
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -63,7 +46,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function Taches() {
+export default function Interventions() {
   const queryClient = useQueryClient();
   const [methods, states] = TndevCtx();
   const { incidentsMethods } = methods;
@@ -71,12 +54,6 @@ export default function Taches() {
   const { bigData, setBigData } = states;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  // tree
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [subject, setSubject] = React.useState("");
-  // tree
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -95,6 +72,8 @@ export default function Taches() {
   } = incidentsMethods;
 
   const { setLoguedIn, user, setUser } = states;
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
   const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
     ["incidents-all"],
     () => apiIncidentsAll(),
@@ -121,6 +100,7 @@ export default function Taches() {
     (values) => apiIncidentCreate(values),
     {
       onSuccess: (data) => {
+        console.log(data);
         queryClient.invalidateQueries("incidents-all");
       },
       onError: (error) => console.log(error),
@@ -137,35 +117,12 @@ export default function Taches() {
       onError: (error) => console.log(error),
     }
   );
-  const [statut, setStatut] = React.useState("");
-  const [priorite, setPriorite] = React.useState("");
 
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
-  const [openValidation, setOpenValidation] = React.useState(false);
-  const [openDetails, setOpenDetails] = React.useState(false);
   const [recordDelete, setRecordDelete] = React.useState({});
-  const [recordValidation, setRecordValidation] = React.useState({});
   const [recordUpdate, setRecordUpdate] = React.useState({
-    name: "",
-    sujet: "",
-    description: "",
-    num_contrat: "",
-    num_serie_machine: "",
-    type_prestation: "",
-    assignation: "",
-    raison_assignation: "",
-    statut: "",
-    priorite: "",
-    nature: "",
-    origine: "",
-    client: "",
-    contact_tel: "",
-    contact_email: "",
-  });
-
-  const [recorddetails, setRecorddetails] = React.useState({
     name: "",
     sujet: "",
     description: "",
@@ -196,17 +153,13 @@ export default function Taches() {
   const handleCreate = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    data.append("user_id", user.id);
-    data.append("nature", "incident");
-    data.append("priorite", priorite);
-    data.append("statut", statut);
     console.log(data);
     let dataCreate = {
       name: data.get("name"),
       type: data.get("type"),
     };
     createRecord(data);
-    setOpenCreate(false);
+    setOpenDelete(false);
   };
 
   const handleClickOpenDeleteDialog = (id) => {
@@ -222,25 +175,14 @@ export default function Taches() {
     deleteRecord(id);
     setOpenDelete(false);
   };
-
-  const handleClickOpenValidationDialog = (id) => {
-    let record = data?.find((i) => i.id === id);
-    console.log(record);
-    setRecordValidation(record);
-
-    setOpenValidation(true);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
   };
-
-  const handleValidation = (id) => {
-    console.log(id);
-    deleteRecord(id);
-    setOpenValidation(false);
-  };
-
   const handleClickOpenUpdateDialog = (id) => {
     let record = data?.find((i) => i.id === id);
-    setRecordUpdate(record);
     console.log(record);
+    setRecordUpdate(record);
     setOpenUpdate(true);
   };
   const handleUpdate = (event) => {
@@ -254,87 +196,17 @@ export default function Taches() {
 
     // console.log(recordUpdate);
     updateRecord(dataUpdate);
-    setOpenUpdate(false);
-  };
-
-  const handleClickOpenDetailsDialog = (id) => {
-    let record = data?.find((i) => i.id === id);
-    console.log("handleClickOpenDetailsDialog");
-    console.log(record);
-    setRecorddetails(record);
-    setOpenDetails(true);
-  };
-  const handleClickOpenDetails = (event) => {
-    event.preventDefault();
-    // const data = new FormData(event.currentTarget);
-
-    // let dataUpdate = {
-    //   id: data.get("id"),
-    //   data: recordUpdate,
-    // };
-
-    // // console.log(recordUpdate);
-    // updateRecord(dataUpdate);
-    setOpenDetails(false);
+    //setOpenDelete(false);
   };
 
   const handleClose = () => {
     setOpenCreate(false);
     setOpenDelete(false);
     setOpenUpdate(false);
-    setOpenDetails(false);
-    setOpenValidation(false);
 
     setAnchorEl(null);
     setOpen(false);
   };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpen(true);
-  };
-  const handleTree = (dt) => {
-    //console.log(dt);
-    setSubject(dt);
-
-    setAnchorEl(null);
-    setOpen(false);
-  };
-
-  const handleChangeStatut = (e) => {
-    setStatut(e.target.value);
-  };
-
-  const handleChangePriorite = (e) => {
-    setPriorite(e.target.value);
-  };
-
-  const handleTri = (e) => {
-    let transformDate = [...bigData];
-    let t = transformDate.map((v, i, t) => [
-      (t[i] = { ...t[i], created_at: new Date(v.created_at) }),
-    ]);
-    let flatArray = [].concat(...t);
-    console.log(flatArray);
-    setBigData(flatArray);
-
-    if (e.target.value === "date-descendante") {
-      console.log(e.target.value);
-      bigData.sort((a, b) => {
-        return a.created_at - b.created_at;
-      });
-    } else if (e.target.value === "date-ascendante") {
-      console.log(e.target.value);
-      bigData.sort((a, b) => {
-        return b.created_at - a.created_at;
-      });
-    } else {
-      console.log("bad format");
-    }
-
-    bigData.map((i) => console.log(i.created_at));
-  };
-
   const [openSecondLevel, setOpenSecondLevel] = React.useState(false);
   const [openThirdLevel, setOpenThirdLevel] = React.useState(false);
 
@@ -344,16 +216,7 @@ export default function Taches() {
   const handleClickCollapseThird = () => {
     setOpenThirdLevel(!openThirdLevel);
   };
-  // download file link
-  const handleDownload = (url, filename) => {
-    axios
-      .get(url, {
-        responseType: "blob",
-      })
-      .then((res) => {
-        fileDownload(res.data, filename);
-      });
-  };
+
   return (
     <>
       <Container sx={{ marginTop: 15 }} maxWidth="xl">
@@ -363,7 +226,7 @@ export default function Taches() {
             justifyContent: "start",
           }}
         >
-          <Typography variant="h4"> Gestion des interventions</Typography>
+          <Typography variant="h4">Gestion des taches</Typography>
         </Box>
         <Box
           sx={{
@@ -419,17 +282,14 @@ export default function Taches() {
             </Menu>
           </div>
 
-          <Button onClick={handleClickOpenCreateDialog}>
-            {" "}
-            Creer un incident
-          </Button>
+          <Button onClick={handleClickOpenCreateDialog}>Creer une Tache</Button>
         </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 700 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell> Incident</StyledTableCell>
+                  <StyledTableCell> Intervention/tache</StyledTableCell>
                   <StyledTableCell align="right">Description</StyledTableCell>
                   <StyledTableCell align="right">Serie Machine</StyledTableCell>
                   <StyledTableCell align="right">Type</StyledTableCell>
@@ -437,13 +297,12 @@ export default function Taches() {
                   <StyledTableCell align="right">priorite</StyledTableCell>
                   <StyledTableCell align="right">Duree(h)</StyledTableCell>
                   <StyledTableCell align="right">Date</StyledTableCell>
-
                   <StyledTableCell align="right">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {bigData
-                  ?.filter((i) => i.nature === "incident")
+                  ?.filter((i) => i.nature === "intervention")
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((i) => {
                     return (
@@ -490,11 +349,11 @@ export default function Taches() {
                         </TableCell>
                         <TableCell align="right">
                           <IconButton
-                            onClick={() => handleClickOpenDetailsDialog(i.id)}
-                            aria-label="details"
-                            title="details"
+                            onClick={() => handleClickOpenUpdateDialog(i.id)}
+                            aria-label="update"
+                            title="mise a jour"
                           >
-                            <VisibilityIcon sx={{ color: "#09f" }} />
+                            <BorderColorIcon sx={{ color: "orange" }} />
                           </IconButton>
                           <IconButton
                             onClick={() => handleClickOpenDeleteDialog(i.id)}
@@ -502,24 +361,6 @@ export default function Taches() {
                             title="suppression"
                           >
                             <DeleteIcon sx={{ color: "red" }} />
-                          </IconButton>
-
-                          <IconButton
-                            onClick={() => handleClickOpenUpdateDialog(i.id)}
-                            aria-label="update"
-                            title="mise a jour"
-                          >
-                            <BorderColorIcon sx={{ color: "orange" }} />
-                          </IconButton>
-
-                          <IconButton
-                            onClick={() =>
-                              handleClickOpenValidationDialog(i.id)
-                            }
-                            aria-label="validationcloture"
-                            title="demande de validation de cloture"
-                          >
-                            <EventAvailableIcon sx={{ color: "green" }} />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -531,7 +372,7 @@ export default function Taches() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={bigData?.filter((i) => i.nature === "incident").length}
+            count={bigData?.filter((i) => i.nature === "intervention").length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -547,8 +388,8 @@ export default function Taches() {
         open={openCreate}
         onClose={handleClose}
       >
-        <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
-          Création nouvel incident
+        <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
+          Creation nouvelle tache
         </DialogTitle>
         <DialogContent>
           <Box
@@ -576,83 +417,16 @@ export default function Taches() {
                 margin="normal"
                 required
                 fullWidth
-                id="created_at"
-                name="created_at"
-                autoComplete="created_at"
+                id="created_date"
+                name="created_date"
+                autoComplete="created_date"
                 label=""
                 helperText=""
                 variant="standard"
                 sx={{ pt: 2.1 }}
               />
 
-              <Menu
-                sx={{ width: "40rem" }}
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem>Typologies Incidents:</MenuItem>
-                <MenuItem sx={{ minWidth: "14rem" }}>
-                  <TreeView
-                    aria-label="file system navigator"
-                    defaultCollapseIcon={<ExpandMoreIcon />}
-                    defaultExpandIcon={<ChevronRightIcon />}
-                    sx={{
-                      // height: 240,
-                      flexGrow: 1,
-                      maxWidth: 800,
-                      overflowY: "auto",
-                      padding: "0px",
-                    }}
-                  >
-                    <TreeItem nodeId="1" label="Serveur">
-                      <TreeItem
-                        nodeId="11"
-                        label="Adressage-ip"
-                        onClick={() => handleTree("Serveur/Adressage-ip")}
-                      />
-                    </TreeItem>
-                    <TreeItem nodeId="2" label="Stockage">
-                      <TreeItem
-                        nodeId="21"
-                        label="Natif"
-                        onClick={() => handleTree("Stockage/Natif")}
-                      />
-                      <TreeItem nodeId="22" label="V8">
-                        <TreeItem
-                          nodeId="221"
-                          label="V8"
-                          onClick={() => handleTree("Stockage/Natif/V8")}
-                        />
-                      </TreeItem>
-                    </TreeItem>
-                    <TreeItem nodeId="3" label="Application">
-                      <TreeItem
-                        nodeId="31"
-                        label="Software"
-                        onClick={() => handleTree("Application/Software")}
-                      />
-                      <TreeItem nodeId="32" label="Configuration">
-                        <TreeItem
-                          nodeId="321"
-                          label="Bios"
-                          onClick={() =>
-                            handleTree("Application/Software/Bios")
-                          }
-                        />
-                      </TreeItem>
-                    </TreeItem>
-                  </TreeView>
-                </MenuItem>
-              </Menu>
-
               <TextField
-                onClick={handleClick}
-                value={subject}
                 margin="normal"
                 required
                 fullWidth
@@ -663,7 +437,6 @@ export default function Taches() {
                 helperText=""
                 variant="standard"
               />
-
               <TextField
                 margin="normal"
                 required
@@ -671,12 +444,11 @@ export default function Taches() {
                 id="description"
                 name="description"
                 autoComplete="description"
-                label="Details"
+                label="Description"
                 helperText=""
                 variant="standard"
               />
             </div>
-
             <div>
               <TextField
                 margin="normal"
@@ -735,56 +507,37 @@ export default function Taches() {
                 variant="standard"
               />
 
-              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Statut
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={statut}
-                  name="statut"
-                  onChange={handleChangeStatut}
-                  label="Statut"
-                >
-                  <MenuItem value="">
-                    <em>Aucun</em>
-                  </MenuItem>
-                  <MenuItem value={`initial`}>Initial</MenuItem>
-                  <MenuItem value={`resolu`}>Resolu</MenuItem>
-                  <MenuItem value={"en-attente"}>En attente</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl variant="standard" sx={{ m: 1, width: 220 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Priorite
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={priorite}
-                  name="priorite"
-                  onChange={handleChangePriorite}
-                  label="Priorite"
-                >
-                  <MenuItem value="">
-                    <em>Aucun</em>
-                  </MenuItem>
-                  <MenuItem value={`haute`}>haute</MenuItem>
-                  <MenuItem value={`basse`}>basse</MenuItem>
-                  <MenuItem value={"moyenne"}>moyenne</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                required
+                margin="normal"
+                fullWidth
+                id="statut"
+                name="statut"
+                autoComplete="statut"
+                label="Statut"
+                helperText=""
+                variant="standard"
+              />
 
               <TextField
                 required
                 margin="normal"
                 fullWidth
-                id="contact_name"
-                name="contact_name"
-                autoComplete="contact_name"
-                label="Nom du contact"
+                id="priorite"
+                name="priorite"
+                autoComplete="priorite"
+                label="Priorite"
+                helperText=""
+                variant="standard"
+              />
+              <TextField
+                required
+                margin="normal"
+                fullWidth
+                id="nature"
+                name="nature"
+                autoComplete="nature"
+                label="Nature"
                 helperText=""
                 variant="standard"
               />
@@ -836,23 +589,15 @@ export default function Taches() {
                 variant="standard"
               />
             </div>
-            <div style={{ paddingTop: "2rem" }}>
-              <TextareaAutosize
-                sx={{ pt: 6, BorderColor: "red", outline: "none" }}
-                id="description"
-                name="description"
-                aria-label="minimum height"
-                minRows={3}
-                placeholder="Description"
-                style={{ width: "100%" }}
-              />
+            <div>
               <TextField
-                type="file"
+                required
                 margin="normal"
                 fullWidth
-                id="filel"
-                name="file"
-                label="piece jointe"
+                id="contact_name"
+                name="contact_name"
+                autoComplete="contact_name"
+                label="Nom du contact"
                 helperText=""
                 variant="standard"
               />
@@ -875,7 +620,7 @@ export default function Taches() {
 
       <Dialog maxWidth="xl" open={openDelete} onClose={handleClose}>
         <DialogTitle sx={{ color: "white", backgroundColor: red[500] }}>
-          Suppression Incident
+          Suppression definitive
         </DialogTitle>
         <DialogContent>
           <Box
@@ -891,7 +636,7 @@ export default function Taches() {
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
               <PriorityHighIcon sx={{ verticalAlign: "middle" }} />{" "}
-              Confirmez-vous la suppression de cet incident ?
+              Confirmez-vous la suppression de cette tache ?
             </Typography>
           </Box>
         </DialogContent>
@@ -907,44 +652,7 @@ export default function Taches() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        className="validation"
-        maxWidth="xl"
-        open={openValidation}
-        onClose={handleClose}
-      >
-        <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
-          Demande de cloture incident
-        </DialogTitle>
-        <DialogContent>
-          <Box
-            noValidate
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              m: "auto",
-              width: "fit-content",
-            }}
-          >
-            <Typography sx={{ mt: 4 }} variant="h6">
-              {" "}
-              Merci de cloturer cet incident .
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={{ color: "gray" }}>
-            Annuler
-          </Button>
-          <Button
-            onClick={() => handleValidation(recordDelete.id)}
-            sx={{ color: red[500] }}
-          >
-            Confirmer
-          </Button>
-        </DialogActions>
-      </Dialog>
+
       <Dialog
         component="form"
         onSubmit={handleUpdate}
@@ -953,7 +661,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: orange[500] }}>
-          Mise a jour incident
+          Mise a jour tache N:{recordUpdate.id}
         </DialogTitle>
         <DialogContent>
           <Box
@@ -1170,27 +878,6 @@ export default function Taches() {
                 variant="standard"
               />
             </div>
-            <div style={{ paddingTop: "2rem" }}>
-              <TextareaAutosize
-                sx={{ pt: 6, BorderColor: "red", outline: "none" }}
-                id="description"
-                name="description"
-                aria-label="minimum height"
-                minRows={3}
-                placeholder="Description"
-                style={{ width: "100%" }}
-              />
-              <TextField
-                type="file"
-                margin="normal"
-                fullWidth
-                id="filel"
-                name="file"
-                label="piece jointe"
-                helperText=""
-                variant="standard"
-              />
-            </div>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -1200,278 +887,6 @@ export default function Taches() {
           <Button type="submit" sx={{ color: orange[500] }}>
             Modifier
           </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        component="form"
-        onSubmit={handleClickOpenDetails}
-        maxWidth="xl"
-        open={openDetails}
-        onClose={handleClose}
-      >
-        <DialogTitle sx={{ color: "white", backgroundColor: blueGrey[500] }}>
-          Details incident
-        </DialogTitle>
-        <DialogContent>
-          <Box
-            sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <div style={{ marginTop: "1rem" }}>
-              <input type="hidden" name="id" value={recorddetails.id} />
-              <TextField
-                defaultValue={recorddetails.name}
-                inputProps={{ readOnly: true }}
-                //onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="name"
-                name="name"
-                autoComplete="name"
-                label="Intitule"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.sujet}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="sujet"
-                name="sujet"
-                autoComplete="sujet"
-                label="Sujet"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.description}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="description"
-                name="description"
-                autoComplete="description"
-                label="Description"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.num_contrat}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="num_contrat"
-                name="num_contrat"
-                autoComplete="num_contrat"
-                label="N contrat"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.num_serie_machine}
-                inputProps={{ readOnly: true }}
-                //onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="num_serie_machine"
-                name="num_serie_machine"
-                autoComplete="num_serie_machine"
-                label="N serie"
-                helperText=""
-                variant="standard"
-              />
-            </div>
-            <div>
-              <TextField
-                defaultValue={recorddetails.type_prestation}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                margin="normal"
-                required
-                fullWidth
-                id="type_prestation"
-                name="type_prestation"
-                autoComplete="type_prestation"
-                label="Type prestation"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.assignation}
-                inputProps={{ readOnly: true }}
-                //onChange={handleOnChange}
-                margin="normal"
-                fullWidth
-                id="assignation"
-                name="assignation"
-                autoComplete="assignation"
-                label="Assignation"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.raison_assignation}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                margin="normal"
-                fullWidth
-                id="raison_assignation"
-                name="raison_assignation"
-                autoComplete="raison_assignation"
-                label="Raison assignation"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.statut}
-                inputProps={{ readOnly: true }}
-                //onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="statut"
-                name="statut"
-                autoComplete="statut"
-                label="Statut"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.priorite}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="priorite"
-                name="priorite"
-                autoComplete="priorite"
-                label="Priorite"
-                helperText=""
-                variant="standard"
-              />
-            </div>
-            <div>
-              <TextField
-                defaultValue={recorddetails.nature}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="nature"
-                name="nature"
-                autoComplete="nature"
-                label="Nature"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.origine}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="origine"
-                name="origine"
-                autoComplete="origine"
-                label="Origine"
-                helperText=""
-                variant="standard"
-              />
-              <TextField
-                defaultValue={recorddetails.client}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="client"
-                name="client"
-                autoComplete="client"
-                label="Client"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.contact_tel}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="contact_tel"
-                name="contact_tel"
-                autoComplete="contact_tel"
-                label="Telephone contact"
-                helperText=""
-                variant="standard"
-              />
-
-              <TextField
-                defaultValue={recorddetails.contact_email}
-                inputProps={{ readOnly: true }}
-                // onChange={handleOnChange}
-                required
-                margin="normal"
-                fullWidth
-                id="contact_email"
-                name="contact_email"
-                autoComplete="contact_email"
-                label="Email contact"
-                helperText=""
-                variant="standard"
-              />
-            </div>
-            <div style={{ paddingTop: "1rem" }}>
-              <Typography style={{ width: "100%" }}>
-                <span style={{ display: "block", paddingBottom: "1rem" }}>
-                  Description:
-                </span>
-
-                <span style={{ display: "block", paddingBottom: "1rem" }}>
-                  {recorddetails.contact_email}
-                </span>
-              </Typography>
-
-              <Button
-                onClick={() => {
-                  handleDownload(
-                    "https://images.pexels.com/photos/1054397/pexels-photo-1054397.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-                    "62118.jpeg"
-                  );
-                }}
-              >
-                Télécharger fichier ...
-              </Button>
-            </div>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={{ color: "gray" }}>
-            Fermer
-          </Button>
-          {/* <Button type="submit" sx={{ color: orange[500] }}>
-            Modifier
-          </Button> */}
         </DialogActions>
       </Dialog>
     </>
