@@ -432,7 +432,7 @@ export default function Taches() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell> Incident</StyledTableCell>
+                  <StyledTableCell> Interventions </StyledTableCell>
                   <StyledTableCell align="right">Description</StyledTableCell>
                   <StyledTableCell align="right">Serie Machine</StyledTableCell>
                   <StyledTableCell align="right">Type</StyledTableCell>

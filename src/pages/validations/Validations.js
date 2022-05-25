@@ -25,7 +25,9 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Switch,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -52,6 +54,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+
+const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -429,7 +433,7 @@ export default function Validations() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell> Incident</StyledTableCell>
+                  <StyledTableCell> Demandes de validations</StyledTableCell>
                   <StyledTableCell align="right">Description</StyledTableCell>
                   <StyledTableCell align="right">Serie Machine</StyledTableCell>
                   <StyledTableCell align="right">Type</StyledTableCell>
@@ -519,7 +523,15 @@ export default function Validations() {
                             aria-label="validationcloture"
                             title="demande de validation de cloture"
                           >
-                            <EventAvailableIcon sx={{ color: "green" }} />
+                            <Tooltip title="Fermer intervention">
+                              <Switch
+                                {...label}
+                                //defaultChecked
+                                checked={true}
+                                size="small"
+                                color="secondary"
+                              />
+                            </Tooltip>
                           </IconButton>
                         </TableCell>
                       </TableRow>
