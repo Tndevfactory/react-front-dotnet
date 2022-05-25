@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthRoutes from "./AuthRoutes";
 import GuestRoutes from "./GuestRoutes";
 import { CenterFocusStrong } from "@mui/icons-material";
+import Taches from "./pages/taches/Taches";
 
 function App() {
   const [methods, states] = TndevCtx();
@@ -54,6 +55,14 @@ function App() {
             element={
               <AuthRoutes loguedIn={loguedIn}>
                 <Interventions />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/taches"
+            element={
+              <AuthRoutes loguedIn={loguedIn}>
+                <Taches />
               </AuthRoutes>
             }
           />

@@ -240,7 +240,7 @@ export default function Navbarr() {
                 Interventions
               </Link>
               <Link
-                to="/interventions"
+                to="/taches"
                 style={{ color: "white", textDecoration: "none" }}
               >
                 Taches

@@ -55,7 +55,7 @@ import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: red[800],
+    backgroundColor: orange[900],
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -63,7 +63,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function Validations() {
+export default function Taches() {
   const queryClient = useQueryClient();
   const [methods, states] = TndevCtx();
   const { incidentsMethods } = methods;
@@ -363,7 +363,7 @@ export default function Validations() {
             justifyContent: "start",
           }}
         >
-          <Typography variant="h4"> Gestion des validations</Typography>
+          <Typography variant="h4"> Gestion des taches</Typography>
         </Box>
         <Box
           sx={{
