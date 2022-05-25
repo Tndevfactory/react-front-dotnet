@@ -25,7 +25,9 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Switch,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -52,6 +54,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+
+const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -519,7 +523,15 @@ export default function Taches() {
                             aria-label="validationcloture"
                             title="demande de validation de cloture"
                           >
-                            <EventAvailableIcon sx={{ color: "green" }} />
+                            <Tooltip title="Fermer intervention">
+                              <Switch
+                                {...label}
+                                //defaultChecked
+                                checked={true}
+                                size="small"
+                                color="secondary"
+                              />
+                            </Tooltip>
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -595,7 +607,7 @@ export default function Taches() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem>Typologies Incidents:</MenuItem>
+                <MenuItem>Typologies Taches:</MenuItem>
                 <MenuItem sx={{ minWidth: "14rem" }}>
                   <TreeView
                     aria-label="file system navigator"
@@ -913,8 +925,8 @@ export default function Taches() {
         open={openValidation}
         onClose={handleClose}
       >
-        <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
-          Demande de cloture incident
+        <DialogTitle sx={{ color: "white", backgroundColor: red[400] }}>
+          Cloture de tache
         </DialogTitle>
         <DialogContent>
           <Box
@@ -929,7 +941,7 @@ export default function Taches() {
           >
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
-              Merci de cloturer cet incident .
+              Cette tache va etre cloturer.
             </Typography>
           </Box>
         </DialogContent>

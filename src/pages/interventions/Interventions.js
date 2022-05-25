@@ -559,7 +559,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
-          Création nouvel incident
+          Création nouvelle intervention
         </DialogTitle>
         <DialogContent>
           <Box
