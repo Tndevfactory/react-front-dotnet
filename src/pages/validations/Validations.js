@@ -926,7 +926,7 @@ export default function Validations() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
-          Demande de cloture incident
+          Accord de validation de cloture
         </DialogTitle>
         <DialogContent>
           <Box
@@ -941,7 +941,7 @@ export default function Validations() {
           >
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
-              Merci de cloturer cet incident .
+              Cet Incident sera cloturé.
             </Typography>
           </Box>
         </DialogContent>
