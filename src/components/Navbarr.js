@@ -232,6 +232,7 @@ export default function Navbarr() {
               >
                 Incidents
               </Link>
+
               <Link
                 to="/interventions"
                 style={{ color: "white", textDecoration: "none" }}
@@ -239,17 +240,35 @@ export default function Navbarr() {
                 Interventions
               </Link>
               <Link
-                to="validations"
+                to="/interventions"
                 style={{ color: "white", textDecoration: "none" }}
               >
-                Validation
+                Taches
               </Link>
+              {user.role === "admin" && (
+                <Link
+                  to="validations"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Validation
+                </Link>
+              )}
             </Box>
           </Box>
           <Box>
             <Typography>
               {" "}
-              Ingénieur {loguedIn && `${user.fname} ${user.lname}`}
+              {user.role === "admin" ? (
+                <span style={{ fontWeight: "700" }}>
+                  {loguedIn && `Administrateur`}
+                </span>
+              ) : (
+                <span style={{ fontWeight: "700" }}>
+                  {" "}
+                  {loguedIn && `Ingénieur`}
+                </span>
+              )}{" "}
+              {loguedIn && `${user.fname} ${user.lname}`}
             </Typography>
           </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
