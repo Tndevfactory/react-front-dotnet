@@ -12,7 +12,8 @@ import TableRow from "@mui/material/TableRow";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
-
+import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
 import {
   Button,
   Collapse,
@@ -52,6 +53,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+
+const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -421,7 +424,7 @@ export default function Taches() {
 
           <Button onClick={handleClickOpenCreateDialog}>
             {" "}
-            Creer un incident
+            Creer une intervention
           </Button>
         </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -519,7 +522,15 @@ export default function Taches() {
                             aria-label="validationcloture"
                             title="demande de validation de cloture"
                           >
-                            <EventAvailableIcon sx={{ color: "green" }} />
+                            <Tooltip title="Fermer intervention">
+                              <Switch
+                                {...label}
+                                //defaultChecked
+                                checked={true}
+                                size="small"
+                                color="secondary"
+                              />
+                            </Tooltip>
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -914,7 +925,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: green[500] }}>
-          Demande de cloture incident
+          Cloture intervention
         </DialogTitle>
         <DialogContent>
           <Box
@@ -929,7 +940,7 @@ export default function Taches() {
           >
             <Typography sx={{ mt: 4 }} variant="h6">
               {" "}
-              Merci de cloturer cet incident .
+              Cette intervention va etre cloturer.
             </Typography>
           </Box>
         </DialogContent>

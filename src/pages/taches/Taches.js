@@ -421,7 +421,7 @@ export default function Taches() {
 
           <Button onClick={handleClickOpenCreateDialog}>
             {" "}
-            Creer un incident
+            Creer une tache
           </Button>
         </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -548,7 +548,7 @@ export default function Taches() {
         onClose={handleClose}
       >
         <DialogTitle sx={{ color: "white", backgroundColor: blue[500] }}>
-          Création nouvel incident
+          Création nouvelle tache
         </DialogTitle>
         <DialogContent>
           <Box
