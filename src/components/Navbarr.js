@@ -201,7 +201,7 @@ export default function Navbarr() {
               fontSize: { xs: "1rem", md: "1.5rem" },
             }}
           >
-            3S Incident Tracker
+            3S
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -253,6 +253,12 @@ export default function Navbarr() {
                   Validation
                 </Link>
               )}
+              <Link
+                to="/stats"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Statistiques
+              </Link>
             </Box>
           </Box>
           <Box>

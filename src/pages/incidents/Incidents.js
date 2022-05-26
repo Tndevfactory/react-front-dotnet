@@ -95,12 +95,14 @@ export default function Incidents() {
   } = incidentsMethods;
 
   const { setLoguedIn, user, setUser } = states;
+  // console.log(user);
   const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
     ["incidents-all"],
     () => apiIncidentsAll(),
     {
       onSuccess: (data) => {
         setBigData(data);
+        //console.log(bigData[0].user.role);
       },
       onError: (error) => console.log(error),
     }
@@ -110,7 +112,7 @@ export default function Incidents() {
     (values) => apiIncidentDelete(values),
     {
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         queryClient.invalidateQueries("incidents-all");
       },
       onError: (error) => console.log(error),
@@ -200,7 +202,7 @@ export default function Incidents() {
     data.append("nature", "incident");
     data.append("priorite", priorite);
     data.append("statut", statut);
-    console.log(data);
+    //console.log(data);
     let dataCreate = {
       name: data.get("name"),
       type: data.get("type"),
@@ -211,14 +213,14 @@ export default function Incidents() {
 
   const handleClickOpenDeleteDialog = (id) => {
     let record = data?.find((i) => i.id === id);
-    console.log(record);
+    //console.log(record);
     setRecordDelete(record);
 
     setOpenDelete(true);
   };
 
   const handleDelete = (id) => {
-    console.log(id);
+    //console.log(id);
     deleteRecord(id);
     setOpenDelete(false);
   };
@@ -240,7 +242,7 @@ export default function Incidents() {
   const handleClickOpenUpdateDialog = (id) => {
     let record = data?.find((i) => i.id === id);
     setRecordUpdate(record);
-    console.log(record);
+    //console.log(record);
     setOpenUpdate(true);
   };
   const handleUpdate = (event) => {
@@ -436,6 +438,7 @@ export default function Incidents() {
                   <StyledTableCell align="right">Statut</StyledTableCell>
                   <StyledTableCell align="right">priorite</StyledTableCell>
                   <StyledTableCell align="right">Duree(h)</StyledTableCell>
+                  <StyledTableCell align="right">Proprietaire</StyledTableCell>
                   <StyledTableCell align="right">Date</StyledTableCell>
 
                   <StyledTableCell align="right">Actions</StyledTableCell>
@@ -443,7 +446,9 @@ export default function Incidents() {
               </TableHead>
               <TableBody>
                 {bigData
-                  ?.filter((i) => i.nature === "incident")
+                  ?.filter((i) =>
+                    user.role === "admin" ? true : i.user.email === user.email
+                  )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((i) => {
                     return (
@@ -451,15 +456,14 @@ export default function Incidents() {
                         key={i.id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
+                          bgcolor: i.type === "ouvert" ? "transparent" : "#ddd",
                         }}
                       >
                         <TableCell component="th" scope="row">
-                          {i.name}
+                          {i.titre}
                         </TableCell>
                         <TableCell align="right">{i.description}</TableCell>
-                        <TableCell align="right">
-                          {i.num_serie_machine}
-                        </TableCell>
+                        <TableCell align="right">{i.num_serie}</TableCell>
                         <TableCell align="right">{i.type}</TableCell>
                         <TableCell align="right">{i.statut}</TableCell>
                         <TableCell align="right">
@@ -485,6 +489,7 @@ export default function Incidents() {
                             new Date(i.created_at)
                           )}
                         </TableCell>
+                        <TableCell align="right">{i.user.email}</TableCell>
                         <TableCell align="right">
                           {format(new Date(i.created_at), "dd-MM-yyyy")}
                         </TableCell>
@@ -512,15 +517,19 @@ export default function Incidents() {
                             <BorderColorIcon sx={{ color: "orange" }} />
                           </IconButton>
 
-                          <IconButton
-                            onClick={() =>
-                              handleClickOpenValidationDialog(i.id)
-                            }
-                            aria-label="validationcloture"
-                            title="demande de validation de cloture"
-                          >
-                            <EventAvailableIcon sx={{ color: "green" }} />
-                          </IconButton>
+                          {user.role !== "admin" ? (
+                            <IconButton
+                              onClick={() =>
+                                handleClickOpenValidationDialog(i.id)
+                              }
+                              aria-label="validationcloture"
+                              title="demande de validation de cloture"
+                            >
+                              <EventAvailableIcon sx={{ color: "green" }} />
+                            </IconButton>
+                          ) : (
+                            ""
+                          )}
                         </TableCell>
                       </TableRow>
                     );

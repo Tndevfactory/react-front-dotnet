@@ -396,7 +396,7 @@ export default function Validations() {
               }}
             >
               <MenuItem onClick={handleClickCollapseSecond}>
-                Statut {openSecondLevel ? <ExpandLess /> : <ExpandMore />}
+                Date {openSecondLevel ? <ExpandLess /> : <ExpandMore />}
               </MenuItem>
               <Collapse
                 in={openSecondLevel}
@@ -404,21 +404,8 @@ export default function Validations() {
                 unmountOnExit
                 sx={{ paddingLeft: 3 }}
               >
-                <MenuItem onClick={handleClose}> En cours</MenuItem>
-                <MenuItem onClick={handleClose}> Résolu</MenuItem>
-              </Collapse>
-              <MenuItem onClick={handleClickCollapseThird}>
-                Priorite {openThirdLevel ? <ExpandLess /> : <ExpandMore />}
-              </MenuItem>
-              <Collapse
-                in={openThirdLevel}
-                timeout="auto"
-                unmountOnExit
-                sx={{ paddingLeft: 3 }}
-              >
-                <MenuItem onClick={handleClose}> Haute</MenuItem>
-                <MenuItem onClick={handleClose}> Haute</MenuItem>
-                <MenuItem onClick={handleClose}> Moyenne</MenuItem>
+                <MenuItem onClick={handleClose}> Ascendante</MenuItem>
+                <MenuItem onClick={handleClose}> Descendante</MenuItem>
               </Collapse>
             </Menu>
           </div>

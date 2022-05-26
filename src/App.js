@@ -13,6 +13,7 @@ import AuthRoutes from "./AuthRoutes";
 import GuestRoutes from "./GuestRoutes";
 import { CenterFocusStrong } from "@mui/icons-material";
 import Taches from "./pages/taches/Taches";
+import Stats from "./pages/stats/Stats";
 
 function App() {
   const [methods, states] = TndevCtx();
@@ -71,6 +72,14 @@ function App() {
             element={
               <AuthRoutes loguedIn={loguedIn}>
                 <Validations />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/stats"
+            element={
+              <AuthRoutes loguedIn={loguedIn}>
+                <Stats />
               </AuthRoutes>
             }
           />
