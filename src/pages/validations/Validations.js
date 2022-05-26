@@ -445,12 +445,10 @@ export default function Validations() {
                         }}
                       >
                         <TableCell component="th" scope="row">
-                          {i.name}
+                          {i.titre}
                         </TableCell>
                         <TableCell align="right">{i.description}</TableCell>
-                        <TableCell align="right">
-                          {i.num_serie_machine}
-                        </TableCell>
+                        <TableCell align="right">{i.num_serie}</TableCell>
                         <TableCell align="right">{i.type}</TableCell>
                         <TableCell align="right">{i.statut}</TableCell>
                         <TableCell align="right">

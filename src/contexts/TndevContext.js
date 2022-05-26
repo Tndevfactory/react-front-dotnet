@@ -103,6 +103,170 @@ const incidentsMethods = {
   apiIncidentUpdate,
 };
 
+// interventions  zone  --> interventionController
+export const apiInterventionAll = async (tri = "asc") => {
+  let payload = {
+    params: {
+      tri: tri,
+    },
+  };
+  let url = "/interventions-all";
+  const { data } = await api.get(url, payload);
+  return data;
+};
+
+export const apiInterventionCreate = async (dt) => {
+  let url = "/intervention-create";
+  const { data } = await api.post(url, dt);
+  return data;
+};
+
+export const apiInterventionDelete = async (id) => {
+  let payload = {
+    params: {
+      id: id,
+    },
+  };
+  let url = "/intervention-delete";
+  const { data } = await api.delete(url, payload);
+  return data;
+};
+
+export const apiInterventionUpdate = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/intervention-update";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+
+const interventionsMethods = {
+  apiInterventionAll,
+  apiInterventionCreate,
+  apiInterventionDelete,
+  apiInterventionUpdate,
+};
+
+// Tache  zone  --> TacheController
+export const apiTachesAll = async (tri = "asc") => {
+  let payload = {
+    params: {
+      tri: tri,
+    },
+  };
+  let url = "/taches-all";
+  const { data } = await api.get(url, payload);
+  return data;
+};
+
+export const apiTacheCreate = async (dt) => {
+  let url = "/tache-create";
+  const { data } = await api.post(url, dt);
+  return data;
+};
+
+export const apiTacheDelete = async (id) => {
+  let payload = {
+    params: {
+      id: id,
+    },
+  };
+  let url = "/tache-delete";
+  const { data } = await api.delete(url, payload);
+  return data;
+};
+
+export const apiTacheUpdate = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/tache-update";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+
+const tachesMethods = {
+  apiTachesAll,
+  apiTacheDelete,
+  apiTacheUpdate,
+  apiTacheCreate,
+};
+
+// Validations  zone  --> ValidationController
+export const apiValidationsAll = async (tri = "asc") => {
+  let payload = {
+    params: {
+      tri: tri,
+    },
+  };
+  let url = "/validations-all";
+  const { data } = await api.get(url, payload);
+  return data;
+};
+
+export const apiAskToCloseIncident = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/ask-to-close-incident";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+export const apiCloseTache = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/close-tache";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+export const apiCloseIntervention = async (dt) => {
+  let payload = {
+    id: dt.id,
+    data: dt.data,
+  };
+  console.log(payload);
+
+  let url = "/close-intervention";
+  const { data } = await api.put(url, payload);
+  return data;
+};
+
+const validationsMethods = {
+  apiValidationsAll,
+  apiAskToCloseIncident,
+  apiCloseIntervention,
+  apiCloseTache,
+};
+
+// Stat  zone  --> StatController
+export const apiStatAll = async (tri = "asc") => {
+  let payload = {
+    params: {
+      tri: tri,
+    },
+  };
+  let url = "/stat-all";
+  const { data } = await api.get(url, payload);
+  return data;
+};
+
+const statsMethods = {
+  apiStatAll,
+};
 export const TndevProvider = ({ children }) => {
   // init check
   const [loguedIn, setLoguedIn] = useState(
@@ -115,6 +279,9 @@ export const TndevProvider = ({ children }) => {
   // console.log(user);
 
   const [bigData, setBigData] = useState([]);
+  const [interventions, setInterventions] = useState([]);
+  const [taches, setTaches] = useState([]);
+
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const states = {
@@ -126,11 +293,19 @@ export const TndevProvider = ({ children }) => {
     setUser,
     bigData,
     setBigData,
+    interventions,
+    setInterventions,
+    taches,
+    setTaches,
   };
 
   const methods = {
     authMethods,
     incidentsMethods,
+    interventionsMethods,
+    tachesMethods,
+    validationsMethods,
+    statsMethods,
   };
 
   return (

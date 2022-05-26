@@ -69,9 +69,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function Taches() {
   const queryClient = useQueryClient();
   const [methods, states] = TndevCtx();
-  const { incidentsMethods } = methods;
+  const { interventionsMethods } = methods;
 
-  const { bigData, setBigData } = states;
+  const { interventions, setInterventions } = states;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -91,51 +91,51 @@ export default function Taches() {
   };
 
   const {
-    apiIncidentsAll,
-    apiIncidentDelete,
-    apiIncidentUpdate,
-    apiIncidentCreate,
-  } = incidentsMethods;
+    apiInterventionAll,
+    apiInterventionCreate,
+    apiInterventionDelete,
+    apiInterventionUpdate,
+  } = interventionsMethods;
 
   const { setLoguedIn, user, setUser } = states;
   const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
-    ["incidents-all"],
-    () => apiIncidentsAll(),
+    ["interventions-all"],
+    () => apiInterventionAll(),
     {
       onSuccess: (data) => {
-        setBigData(data);
+        setInterventions(data);
       },
       onError: (error) => console.log(error),
     }
   );
 
   const { mutate: deleteRecord, data: deleteMsg } = useMutation(
-    (values) => apiIncidentDelete(values),
+    (values) => apiInterventionDelete(values),
     {
       onSuccess: (data) => {
-        console.log(data);
-        queryClient.invalidateQueries("incidents-all");
+        //console.log(data);
+        queryClient.invalidateQueries("interventions-all");
       },
       onError: (error) => console.log(error),
     }
   );
 
   const { mutate: createRecord, data: createMsg } = useMutation(
-    (values) => apiIncidentCreate(values),
+    (values) => apiInterventionCreate(values),
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries("incidents-all");
+        queryClient.invalidateQueries("interventions-all");
       },
       onError: (error) => console.log(error),
     }
   );
 
   const { mutate: updateRecord, data: updateMsg } = useMutation(
-    (values) => apiIncidentUpdate(values),
+    (values) => apiInterventionUpdate(values),
     {
       onSuccess: (data) => {
-        console.log(data);
-        queryClient.invalidateQueries("incidents-all");
+        // console.log(data);
+        queryClient.invalidateQueries("interventions-all");
       },
       onError: (error) => console.log(error),
     }
@@ -313,29 +313,29 @@ export default function Taches() {
   };
 
   const handleTri = (e) => {
-    let transformDate = [...bigData];
+    let transformDate = [...interventions];
     let t = transformDate.map((v, i, t) => [
       (t[i] = { ...t[i], created_at: new Date(v.created_at) }),
     ]);
     let flatArray = [].concat(...t);
     console.log(flatArray);
-    setBigData(flatArray);
+    setInterventions(flatArray);
 
     if (e.target.value === "date-descendante") {
       console.log(e.target.value);
-      bigData.sort((a, b) => {
+      interventions.sort((a, b) => {
         return a.created_at - b.created_at;
       });
     } else if (e.target.value === "date-ascendante") {
       console.log(e.target.value);
-      bigData.sort((a, b) => {
+      interventions.sort((a, b) => {
         return b.created_at - a.created_at;
       });
     } else {
       console.log("bad format");
     }
 
-    bigData.map((i) => console.log(i.created_at));
+    interventions.map((i) => console.log(i.created_at));
   };
 
   const [openSecondLevel, setOpenSecondLevel] = React.useState(false);
@@ -420,20 +420,26 @@ export default function Taches() {
               <TableHead>
                 <TableRow>
                   <StyledTableCell> Interventions </StyledTableCell>
-                  <StyledTableCell align="right">Description</StyledTableCell>
-                  <StyledTableCell align="right">Serie Machine</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Contrat maintenance
+                  </StyledTableCell>
+                  <StyledTableCell align="right">Date appel</StyledTableCell>
                   <StyledTableCell align="right">Type</StyledTableCell>
-                  <StyledTableCell align="right">Statut</StyledTableCell>
-                  <StyledTableCell align="right">priorite</StyledTableCell>
-                  <StyledTableCell align="right">Duree(h)</StyledTableCell>
-                  <StyledTableCell align="right">Date</StyledTableCell>
+                  <StyledTableCell align="right">Compte</StyledTableCell>
+                  <StyledTableCell align="right">Date écheance</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Date intervention
+                  </StyledTableCell>
+                  <StyledTableCell align="right">Propriétaire</StyledTableCell>
 
                   <StyledTableCell align="right">Actions</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {bigData
-                  ?.filter((i) => i.nature === "incident")
+                {interventions
+                  ?.filter((i) =>
+                    user.role === "admin" ? true : i.user.email === user.email
+                  )
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((i) => {
                     return (
@@ -444,40 +450,27 @@ export default function Taches() {
                         }}
                       >
                         <TableCell component="th" scope="row">
-                          {i.name}
+                          {i.sujet}
                         </TableCell>
-                        <TableCell align="right">{i.description}</TableCell>
                         <TableCell align="right">
-                          {i.num_serie_machine}
-                        </TableCell>
-                        <TableCell align="right">{i.type}</TableCell>
-                        <TableCell align="right">{i.statut}</TableCell>
-                        <TableCell align="right">
-                          <Chip
-                            label={i.priorite}
-                            sx={{
-                              background:
-                                i.priorite === "haute"
-                                  ? "red"
-                                  : i.priorite === "basse"
-                                  ? "green"
-                                  : "orange",
-                              color: "white",
-                            }}
-                            size="small"
-                            variant="outlined"
-                          />
+                          {i.contrat_maintenance}
                         </TableCell>
 
                         <TableCell align="right">
-                          {differenceInHours(
-                            Date.now(),
-                            new Date(i.created_at)
-                          )}
+                          {format(new Date(i.date_appel), "dd-MM-yyyy")}
                         </TableCell>
+
+                        <TableCell align="right"> {i.type}</TableCell>
+                        <TableCell align="right">{i.compte}</TableCell>
                         <TableCell align="right">
-                          {format(new Date(i.created_at), "dd-MM-yyyy")}
+                          {" "}
+                          {format(new Date(i.date_echeance), "dd-MM-yyyy")}
                         </TableCell>
+
+                        <TableCell align="right">
+                          {format(new Date(i.date_intervention), "dd-MM-yyyy")}
+                        </TableCell>
+                        <TableCell align="right">{i.user.email}</TableCell>
                         <TableCell align="right">
                           <IconButton
                             onClick={() => handleClickOpenDetailsDialog(i.id)}
@@ -529,7 +522,7 @@ export default function Taches() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={bigData?.filter((i) => i.nature === "incident").length}
+            count={interventions?.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
