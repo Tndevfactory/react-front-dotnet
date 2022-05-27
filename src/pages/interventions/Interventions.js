@@ -436,7 +436,7 @@ export default function Taches() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {interventions
+                {[...interventions]
                   ?.filter((i) =>
                     user.role === "admin" ? true : i.user.email === user.email
                   )
