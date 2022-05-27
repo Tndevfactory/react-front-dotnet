@@ -69,7 +69,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function Taches() {
   const queryClient = useQueryClient();
   const [methods, states] = TndevCtx();
-  const { interventionsMethods } = methods;
+  const { interventionsMethods, validationsMethods } = methods;
 
   const { interventions, setInterventions } = states;
   const [page, setPage] = React.useState(0);
@@ -96,6 +96,8 @@ export default function Taches() {
     apiInterventionDelete,
     apiInterventionUpdate,
   } = interventionsMethods;
+
+  const { apiCloseIntervention } = validationsMethods;
 
   const { setLoguedIn, user, setUser } = states;
   const { isSuccess, isLoading, refetch, error, data, isFetching } = useQuery(
@@ -140,6 +142,15 @@ export default function Taches() {
       onError: (error) => console.log(error),
     }
   );
+
+  const { mutate: closeInterventionFn, data: closeInterventionResponse } =
+    useMutation((values) => apiCloseIntervention(values), {
+      onSuccess: (data) => {
+        // console.log(data);
+        queryClient.invalidateQueries("interventions-all");
+      },
+      onError: (error) => console.log(error),
+    });
   const [statut, setStatut] = React.useState("");
   const [priorite, setPriorite] = React.useState("");
 
@@ -225,18 +236,18 @@ export default function Taches() {
     deleteRecord(id);
     setOpenDelete(false);
   };
-
-  const handleClickOpenValidationDialog = (id) => {
+  const [closeIntervention, setCloseIntervention] = React.useState(false);
+  const handleClickOpenValidationDialog = (e, id) => {
     let record = data?.find((i) => i.id === id);
     console.log(record);
-    setRecordValidation(record);
-
+    console.log(e.target.checked);
+    setCloseIntervention(record);
     setOpenValidation(true);
   };
 
   const handleValidation = (id) => {
     console.log(id);
-    deleteRecord(id);
+    closeInterventionFn(closeIntervention);
     setOpenValidation(false);
   };
 
@@ -447,6 +458,8 @@ export default function Taches() {
                         key={i.id}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
+                          backgroundColor:
+                            i.type === "1" ? "#ddd" : "transparent",
                         }}
                       >
                         <TableCell component="th" scope="row">
@@ -460,7 +473,10 @@ export default function Taches() {
                           {format(new Date(i.date_appel), "dd-MM-yyyy")}
                         </TableCell>
 
-                        <TableCell align="right"> {i.type}</TableCell>
+                        <TableCell align="right">
+                          {" "}
+                          {i.type === "1" ? "fermé" : i.type}
+                        </TableCell>
                         <TableCell align="right">{i.compte}</TableCell>
                         <TableCell align="right">
                           {" "}
@@ -471,48 +487,63 @@ export default function Taches() {
                           {format(new Date(i.date_intervention), "dd-MM-yyyy")}
                         </TableCell>
                         <TableCell align="right">{i.user.email}</TableCell>
-                        <TableCell align="right">
-                          <IconButton
-                            onClick={() => handleClickOpenDetailsDialog(i.id)}
-                            aria-label="details"
-                            title="details"
-                          >
-                            <VisibilityIcon sx={{ color: "#09f" }} />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => handleClickOpenDeleteDialog(i.id)}
-                            aria-label="delete"
-                            title="suppression"
-                          >
-                            <DeleteIcon sx={{ color: "red" }} />
-                          </IconButton>
+                        {i.type === "1" ? (
+                          <TableCell align="right">
+                            <IconButton
+                              onClick={() => handleClickOpenDetailsDialog(i.id)}
+                              aria-label="details"
+                              title="details"
+                            >
+                              <VisibilityIcon sx={{ color: "#09f" }} />
+                            </IconButton>
+                          </TableCell>
+                        ) : (
+                          <TableCell align="right">
+                            <IconButton
+                              onClick={() => handleClickOpenDetailsDialog(i.id)}
+                              aria-label="details"
+                              title="details"
+                            >
+                              <VisibilityIcon sx={{ color: "#09f" }} />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleClickOpenDeleteDialog(i.id)}
+                              aria-label="delete"
+                              title="suppression"
+                            >
+                              <DeleteIcon sx={{ color: "red" }} />
+                            </IconButton>
 
-                          <IconButton
-                            onClick={() => handleClickOpenUpdateDialog(i.id)}
-                            aria-label="update"
-                            title="mise a jour"
-                          >
-                            <BorderColorIcon sx={{ color: "orange" }} />
-                          </IconButton>
+                            <IconButton
+                              onClick={() => handleClickOpenUpdateDialog(i.id)}
+                              aria-label="update"
+                              title="mise a jour"
+                            >
+                              <BorderColorIcon sx={{ color: "orange" }} />
+                            </IconButton>
 
-                          <IconButton
-                            onClick={() =>
-                              handleClickOpenValidationDialog(i.id)
-                            }
-                            aria-label="validationcloture"
-                            title="demande de validation de cloture"
-                          >
-                            <Tooltip title="Fermer intervention">
-                              <Switch
-                                {...label}
-                                //defaultChecked
-                                checked={true}
-                                size="small"
-                                color="secondary"
-                              />
-                            </Tooltip>
-                          </IconButton>
-                        </TableCell>
+                            <IconButton
+                              // onClick={() =>
+                              //   handleClickOpenValidationDialog(i.id)
+                              // }
+                              aria-label="validationcloture"
+                              title="demande de validation de cloture"
+                            >
+                              <Tooltip title="Fermer intervention">
+                                <Switch
+                                  {...label}
+                                  //defaultChecked
+                                  checked={i.type === "ouverte" ? false : true}
+                                  onChange={(e) =>
+                                    handleClickOpenValidationDialog(e, i.id)
+                                  }
+                                  size="small"
+                                  color="secondary"
+                                />
+                              </Tooltip>
+                            </IconButton>
+                          </TableCell>
+                        )}
                       </TableRow>
                     );
                   })}
