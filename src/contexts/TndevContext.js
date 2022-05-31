@@ -10,7 +10,7 @@ export const TndevCtx = () => {
 };
 
 // config
-const BASE_URL_SERVER = "http://localhost:8000/api";
+
 console.clear();
 // console.warn("Contact Developer:");
 // console.warn("Name: CH");
@@ -20,11 +20,11 @@ console.clear();
 // console.warn("facebook: https://www.facebook.com/TndevArt");
 
 console.log(process.env.NODE_ENV);
-console.log(process.env.REACT_APP_BASE_URL);
+console.log(process.env.REACT_APP_BASE_API_ENDPOINT);
 
 const api = axios.create({
   // baseURL: process.env.BASE_URL,
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_API_ENDPOINT,
 });
 
 api.interceptors.request.use(function (config) {
